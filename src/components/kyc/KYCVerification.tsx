@@ -1,12 +1,20 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/Button"
-import { ProgressSteps } from "@/components/ui/ProgressSteps"
-import { Sidebar } from "@/components/kyc/Sidebar"
-import { Header } from "@/components/kyc/Header"
-import { CheckCircle2, Loader2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { CheckCircle2, Loader2 } from "lucide-react"
+
+import { Button } from "@/components/ui/Button"
+import { Header } from "@/components/kyc/Header"
+import { Sidebar } from "@/components/kyc/Sidebar"
+import { ProgressSteps } from "@/components/ui/ProgressSteps"
+import { PersonalInfoStep } from "@/components/kyc/PersonalInfoStep"
+import { useKYCForm } from "@/hooks/useKycForm"
 
 export function KYCVerification() {
+  const {
+    formData,
+    updatePersonalInfo,
+  } = useKYCForm()
+
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -101,7 +109,6 @@ export function KYCVerification() {
         <div className="p-4 md:p-6 lg:p-8">
           <div className="mx-auto max-w-4xl">
 
-            {/* Progress Steps */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -111,7 +118,6 @@ export function KYCVerification() {
               <ProgressSteps steps={steps} currentStep={currentStep} onStepClick={goToStep} />
             </motion.div>
 
-            {/* Form Content */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -127,15 +133,14 @@ export function KYCVerification() {
                   transition={{ duration: 0.2 }}
                 >
                   {currentStep === 1 && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">Informações Pessoais</h3>
-                      <p className="text-muted-foreground">Preencha suas informações pessoais básicas.</p>
-                    </div>
+                    <PersonalInfoStep
+                      data={formData.personalInfo}
+                      onChange={updatePersonalInfo}
+                    />
                   )}
                 </motion.div>
               </AnimatePresence>
 
-              {/* Navigation Buttons */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

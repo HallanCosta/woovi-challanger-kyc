@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react"
+import type { KYCFormData, PersonalInfo } from "@/lib/types"
 
-const initialFormData = {
+const initialFormData: KYCFormData = {
   personalInfo: {
     fullName: "",
     email: "",
@@ -28,15 +29,20 @@ const initialFormData = {
 }
 
 export function useKYCForm() {
-  const [formData, setFormData] = useState(initialFormData)
-  const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set())
+  const [formData, setFormData] = useState<KYCFormData>(initialFormData)
 
-  const markFieldTouched = useCallback((fieldName: string) => {
-    setTouchedFields((prev) => new Set(prev).add(fieldName))
-  }, [])
+  const updatePersonalInfo = useCallback(
+    (data: Partial<PersonalInfo>) => {
+      setFormData((prev) => ({
+        ...prev,
+        personalInfo: { ...prev.personalInfo, ...data },
+      }))
+    },
+    [],
+  )
 
   const validateStep = useCallback(
-    (step: number): boolean => {
+    (_step: number): boolean => {
       return true
     },
     [formData],
@@ -44,27 +50,12 @@ export function useKYCForm() {
 
   const resetForm = useCallback(() => {
     setFormData(initialFormData)
-    setTouchedFields(new Set())
-  }, [])
-
-  const loadDraft = useCallback(() => {
-    try {
-      const saved = localStorage.getItem("kyc-form-draft")
-      if (saved) {
-        return JSON.parse(saved)
-      }
-    } catch (error) {
-      console.error("[v0] Error loading draft:", error)
-    }
-    return null
   }, [])
 
   return {
     formData,
-    touchedFields,
-    markFieldTouched,
+    updatePersonalInfo,
     validateStep,
     resetForm,
-    loadDraft,
   }
 }
