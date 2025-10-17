@@ -70,12 +70,13 @@ export function Sidebar() {
             <button
               key={item.label}
               className={cn(
-                "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
                 item.active
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                  : "text-sidebar-foreground/40 cursor-not-allowed opacity-60",
               )}
-              onClick={() => setIsOpen(false)}
+              onClick={() => item.active && setIsOpen(false)}
+              disabled={!item.active}
             >
               <Icon className="h-4 w-4" />
               {item.label}
