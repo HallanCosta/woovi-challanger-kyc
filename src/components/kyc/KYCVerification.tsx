@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { CheckCircle2, Loader2 } from "lucide-react"
 
@@ -20,6 +20,7 @@ export function KYCVerification() {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const firstFieldRef = useRef<HTMLInputElement>(null)
 
   const totalSteps = 5
   const isFirstStep = currentStep === 1
@@ -63,6 +64,39 @@ export function KYCVerification() {
     setIsSubmitting(false)
     setIsSubmitted(true)
   }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLElement && event.target.matches('input, textarea, select')) {
+        return
+      }
+
+      if (!event.altKey) return
+
+      const shortcuts: Record<string, () => void> = {
+        '>': () => !isLastStep && handleNext(),
+        '<': () => !isFirstStep && prevStep(),
+        'f': () => firstFieldRef.current?.focus(),
+        'F': () => firstFieldRef.current?.focus(),
+        's': () => isLastStep && handleSubmit(),
+        'S': () => isLastStep && handleSubmit()
+      }
+
+      const codeShortcuts: Record<string, () => void> = {
+        'Period': () => !isLastStep && handleNext(), // . (ponto) com Shift = >
+        'Comma': () => !isFirstStep && prevStep(),   // , (vírgula) com Shift = <
+      }
+
+      const action = shortcuts[event.key] || codeShortcuts[event.code]
+      if (action) {
+        event.preventDefault()
+        action()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [currentStep, isFirstStep, isLastStep])
 
   if (isSubmitted) {
     return (
@@ -141,6 +175,7 @@ export function KYCVerification() {
                       data={formData.personalInfo}
                       onChange={updatePersonalInfo}
                       errors={errors}
+                      firstFieldRef={firstFieldRef}
                     />
                   )}
                 </motion.div>

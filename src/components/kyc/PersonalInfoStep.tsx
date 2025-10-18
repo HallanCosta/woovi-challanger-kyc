@@ -1,20 +1,21 @@
-"use client"
-
 import { Input } from "@/components/ui/Input"
 import { FormField } from "@/components/ui/FormField"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
+import { KeyboardShortcutsTooltip } from "@/components/kyc/KeyboardShortcutsTooltip"
+
 import { COUNTRIES } from "@/constants/countries"
+
 import type { PersonalInfo, ValidationErrors } from "@/lib/types"
 import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils/phoneFormatter"
 
-
-interface PersonalInfoStepProps {
+type PersonalInfoStepProps = {
   data: PersonalInfo
   errors: ValidationErrors
   onChange: (data: Partial<PersonalInfo>) => void
+  firstFieldRef?: React.RefObject<HTMLInputElement | null>
 }
 
-export function PersonalInfoStep({ data, errors, onChange }: PersonalInfoStepProps) {
+export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: PersonalInfoStepProps) {
   const handlePhoneChange = (value: string) => {
     if (!data.country) return
     const formatted = formatPhoneNumber(value, data.country)
@@ -30,13 +31,17 @@ export function PersonalInfoStep({ data, errors, onChange }: PersonalInfoStepPro
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Informações Pessoais</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-2xl font-bold">Informações Pessoais</h2>
+          <KeyboardShortcutsTooltip />
+        </div>
         <p className="mt-2 text-sm text-muted-foreground">Forneça seus dados pessoais básicos</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <FormField label="Nome Completo" error={errors.fullName} required className="md:col-span-2">
           <Input
+            ref={firstFieldRef}
             value={data.fullName}
             onChange={(e) => onChange({ fullName: e.target.value })}
             placeholder="Digite seu nome completo"
