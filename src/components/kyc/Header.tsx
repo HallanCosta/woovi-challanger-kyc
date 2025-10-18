@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/ui/Button"
 import { Moon, Sun, Languages } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"

@@ -1,7 +1,7 @@
-import { KYCVerification } from '@/components/kyc/KYCVerification'
+import { KycVerification } from '@/components/kyc/KycVerification'
 
 function App() {
-  return <KYCVerification />
+  return <KycVerification />
 }
 
 export default App

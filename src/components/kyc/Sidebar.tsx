@@ -1,6 +1,4 @@
-"use client"
-
-import { cn } from "@/lib/utils"
+import { useState } from "react"
 import {
   LayoutDashboard,
   Users,
@@ -15,8 +13,8 @@ import {
   Menu,
   X,
 } from "lucide-react"
-import { useState } from "react"
 import { Button } from "@/components/ui/Button"
+import { cn } from "@/lib/utils"
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", active: true },

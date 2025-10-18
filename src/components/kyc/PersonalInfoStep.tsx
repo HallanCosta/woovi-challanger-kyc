@@ -1,3 +1,5 @@
+import type { FieldErrors } from "react-hook-form"
+
 import { Input } from "@/components/ui/Input"
 import { FormField } from "@/components/ui/FormField"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
@@ -5,12 +7,13 @@ import { KeyboardShortcutsTooltip } from "@/components/kyc/KeyboardShortcutsTool
 
 import { COUNTRIES } from "@/constants/countries"
 
-import type { PersonalInfo, ValidationErrors } from "@/lib/types"
+import type { KYCFormData, PersonalInfo } from "@/lib/validation"
+
 import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils/phoneFormatter"
 
 type PersonalInfoStepProps = {
   data: PersonalInfo
-  errors: ValidationErrors
+  errors: FieldErrors<KYCFormData>
   onChange: (data: Partial<PersonalInfo>) => void
   firstFieldRef?: React.RefObject<HTMLInputElement | null>
 }
@@ -39,7 +42,7 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <FormField label="Nome Completo" error={errors.fullName} required className="md:col-span-2">
+        <FormField label="Nome Completo" error={errors.personalInfo?.fullName?.message} required className="md:col-span-2">
           <Input
             ref={firstFieldRef}
             value={data.fullName}
@@ -48,7 +51,7 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
           />
         </FormField>
 
-        <FormField label="Email" error={errors.email} required>
+        <FormField label="Email" error={errors.personalInfo?.email?.message} required>
           <Input
             type="email"
             value={data.email}
@@ -57,7 +60,7 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
           />
         </FormField>
 
-        <FormField label="País" error={errors.country} required>
+        <FormField label="País" error={errors.personalInfo?.country?.message} required>
           <Select value={data.country} onValueChange={handleCountryChange}>
             <SelectTrigger>
               <SelectValue placeholder="Selecione seu país" />
@@ -72,7 +75,7 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
           </Select>
         </FormField>
 
-        <FormField label="Telefone" error={errors.phone} required>
+        <FormField label="Telefone" error={errors.personalInfo?.phone?.message} required>
           <Input
             value={data.phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
@@ -80,12 +83,12 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
             maxLength={phoneFormat?.maxLength}
             type="tel"
             disabled={!data.country}
-            aria-invalid={!!errors.phone}
+            aria-invalid={!!errors.personalInfo?.phone}
             aria-describedby={!data.country ? "phone-helper" : undefined}
           />
         </FormField>
 
-        <FormField label="Data de Nascimento" error={errors.dateOfBirth} required>
+        <FormField label="Data de Nascimento" error={errors.personalInfo?.dateOfBirth?.message} required>
           <Input
             type="date"
             value={data.dateOfBirth}

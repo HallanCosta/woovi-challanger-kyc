@@ -1,27 +1,42 @@
-import type { PersonalInfo, ValidationErrors } from "./types"
+import { z } from 'zod'
 
-export function validateEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email)
-}
+const emailSchema = z.string().email('Please enter a valid email address')
 
-export function validateFullName(fullName: string): boolean {
-  const trimmedName = fullName.trim()
-  if (trimmedName.length < 3) {
-    return false
-  }
-  
-  const nameParts = trimmedName.split(/\s+/).filter(part => part.length > 0)
-  
-  if (nameParts.length < 2) {
-    return false
-  }
-  
-  return nameParts.every(part => part.length >= 2)
-}
+const fullNameSchema = z.string()
+  .min(1, 'Full name is required')
+  .refine((name) => {
+    const trimmedName = name.trim()
+    if (trimmedName.length < 3) return false
+    
+    const nameParts = trimmedName.split(/\s+/).filter(part => part.length > 0)
+    if (nameParts.length < 2) return false
+    
+    return nameParts.every(part => part.length >= 2)
+  }, 'Please enter your full name with at least first and last name')
 
-export function validatePhone(phone: string, country?: string): boolean {
-  const cleanPhone = phone.replace(/[\s\-+()]/g, "")
+const dateOfBirthSchema = z.string()
+  .min(1, 'Date of birth is required')
+  .refine((date) => {
+    const today = new Date()
+    const birthDate = new Date(date)
+    let age = today.getFullYear() - birthDate.getFullYear()
+    const monthDiff = today.getMonth() - birthDate.getMonth()
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--
+    }
+
+    return age >= 18
+  }, 'You must be at least 18 years old')
+
+export const personalInfoSchema = z.object({
+  fullName: fullNameSchema,
+  email: emailSchema,
+  phone: z.string().min(1, 'Phone number is required'),
+  dateOfBirth: dateOfBirthSchema,
+  country: z.string().min(1, 'Country is required')
+}).refine((data) => {
+  const cleanPhone = data.phone.replace(/[\s\-+()]/g, '')
 
   if (!/^\d+$/.test(cleanPhone)) {
     return false
@@ -40,92 +55,107 @@ export function validatePhone(phone: string, country?: string): boolean {
     Australia: [10]
   }
 
-  if (country && country in countryPhoneLengths) {
-    const validLengths = countryPhoneLengths[country]
+  if (data.country in countryPhoneLengths) {
+    const validLengths = countryPhoneLengths[data.country]
     return validLengths.includes(cleanPhone.length)
   }
 
   return cleanPhone.length >= 8
+}, {
+  message: 'Please enter a valid phone number',
+  path: ['phone']
+})
+
+export const addressInfoSchema = z.object({
+  street: z.string().min(1, 'Street is required'),
+  city: z.string().min(1, 'City is required'),
+  state: z.string().min(1, 'State is required'),
+  postalCode: z.string().min(1, 'Postal code is required'),
+  addressProof: z.instanceof(File).nullable()
+})
+
+export const identityInfoSchema = z.object({
+  idType: z.enum(['passport', 'drivers-license', 'rg', '']).refine((val) => val !== '', 'Please select an ID type'),
+  idNumber: z.string().min(1, 'ID number is required'),
+  idFront: z.instanceof(File).nullable(),
+  idBack: z.instanceof(File).nullable()
+})
+
+export const selfieInfoSchema = z.object({
+  selfie: z.instanceof(File).nullable()
+})
+
+export const kycFormDataSchema = z.object({
+  personalInfo: personalInfoSchema,
+  addressInfo: addressInfoSchema,
+  identityInfo: identityInfoSchema,
+  selfieInfo: selfieInfoSchema,
+  termsAccepted: z.boolean().refine((val) => val === true, 'You must accept the terms and conditions')
+})
+
+export type PersonalInfo = z.infer<typeof personalInfoSchema>
+export type AddressInfo = z.infer<typeof addressInfoSchema>
+export type IdentityInfo = z.infer<typeof identityInfoSchema>
+export type SelfieInfo = z.infer<typeof selfieInfoSchema>
+export type KYCFormData = z.infer<typeof kycFormDataSchema>
+
+export function validatePersonalInfo(data: unknown) {
+  return personalInfoSchema.safeParse(data)
 }
 
-export function calculateAge(dateOfBirth: string): number {
-  const today = new Date()
-  const birthDate = new Date(dateOfBirth)
-  let age = today.getFullYear() - birthDate.getFullYear()
-  const monthDiff = today.getMonth() - birthDate.getMonth()
-
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-    age--
-  }
-
-  return age
+export function validateAddressInfo(data: unknown) {
+  return addressInfoSchema.safeParse(data)
 }
 
-export function validatePersonalInfo(data: PersonalInfo): ValidationErrors {
-  const errors: ValidationErrors = {}
-
-  if (!data.fullName.trim()) {
-    errors.fullName = "Full name is required"
-  } else if (!validateFullName(data.fullName)) {
-    errors.fullName = "Please enter your full name with at least first and last name"
-  }
-
-  if (!data.email.trim()) {
-    errors.email = "Email is required"
-  } else if (!validateEmail(data.email)) {
-    errors.email = "Please enter a valid email address"
-  }
-
-  if (!data.phone.trim()) {
-    errors.phone = "Phone number is required"
-  } else if (!validatePhone(data.phone, data.country)) {
-    errors.phone = "Please enter a valid phone number"
-  }
-
-  if (!data.dateOfBirth) {
-    errors.dateOfBirth = "Date of birth is required"
-  } else {
-    const age = calculateAge(data.dateOfBirth)
-    if (age < 18) {
-      errors.dateOfBirth = "You must be at least 18 years old"
-    }
-  }
-
-  if (!data.country) {
-    errors.country = "Country is required"
-  }
-
-  return errors
+export function validateIdentityInfo(data: unknown) {
+  return identityInfoSchema.safeParse(data)
 }
 
-export function validateField(fieldName: string, value: any, allData?: any): string | null {
+export function validateSelfieInfo(data: unknown) {
+  return selfieInfoSchema.safeParse(data)
+}
+
+export function validateKYCFormData(data: unknown) {
+  return kycFormDataSchema.safeParse(data)
+}
+
+export function validateField(fieldName: string, value: any, allData?: any) {
   switch (fieldName) {
-    case "fullName":
-      if (!value?.trim()) return "Full name is required"
-      if (!validateFullName(value)) return "Please enter your full name with at least first and last name"
+    case 'fullName':
+      const fullNameResult = fullNameSchema.safeParse(value)
+      return fullNameResult.success ? null : fullNameResult.error.issues[0]?.message || 'Invalid full name'
+    
+    case 'email':
+      const emailResult = emailSchema.safeParse(value)
+      return emailResult.success ? null : emailResult.error.issues[0]?.message || 'Invalid email'
+    
+    case 'phone':
+      if (!value?.trim()) return 'Phone number is required'
+      const phoneResult = personalInfoSchema.pick({ phone: true, country: true }).safeParse({ phone: value, country: allData?.country })
+      return phoneResult.success ? null : phoneResult.error.issues[0]?.message || 'Invalid phone number'
+    
+    case 'dateOfBirth':
+      const dateResult = dateOfBirthSchema.safeParse(value)
+      return dateResult.success ? null : dateResult.error.issues[0]?.message || 'Invalid date of birth'
+    
+    case 'country':
+      if (!value) return 'Country is required'
       return null
-
-    case "email":
-      if (!value?.trim()) return "Email is required"
-      if (!validateEmail(value)) return "Please enter a valid email address"
-      return null
-
-    case "phone":
-      if (!value?.trim()) return "Phone number is required"
-      if (!validatePhone(value, allData?.country)) return "Please enter a valid phone number"
-      return null
-
-    case "dateOfBirth":
-      if (!value) return "Date of birth is required"
-      const age = calculateAge(value)
-      if (age < 18) return "You must be at least 18 years old"
-      return null
-
-    case "country":
-      if (!value) return "Country is required"
-      return null
-
+    
     default:
       return null
   }
+}
+
+export function getValidationErrors(result: { success: boolean; error?: { issues: Array<{ path: (string | number)[]; message: string }> } }): Record<string, string> {
+  if (result.success) return {}
+  
+  const errors: Record<string, string> = {}
+  
+  result.error?.issues.forEach((error) => {
+    const path = error.path.join('.')
+    errors[path] = error.message
+  })
+  
+  return errors
 }

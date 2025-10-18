@@ -7,14 +7,18 @@ import { Header } from "@/components/kyc/Header"
 import { Sidebar } from "@/components/kyc/Sidebar"
 import { ProgressSteps } from "@/components/ui/ProgressSteps"
 import { PersonalInfoStep } from "@/components/kyc/PersonalInfoStep"
-import { useKYCForm } from "@/hooks/useKycForm"
+import { Toast, ToastContainer } from "@/components/ui/Toast"
 
-export function KYCVerification() {
+import { useKYCForm } from "@/hooks/useKycForm"
+import { useToast } from "@/hooks/useToast"
+
+export function KycVerification() {
   const {
     formData,
     updatePersonalInfo,
+    validateStep,
     errors,
-    validateStep
+    onSubmit
   } = useKYCForm()
 
   const [currentStep, setCurrentStep] = useState(1)
@@ -22,9 +26,18 @@ export function KYCVerification() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const firstFieldRef = useRef<HTMLInputElement>(null)
 
+  const { toasts, toast, dismiss } = useToast()
+
   const totalSteps = 5
   const isFirstStep = currentStep === 1
   const isLastStep = currentStep === totalSteps
+  const steps = [
+    { number: 1, label: "Informações Pessoais" },
+    { number: 2, label: "Endereço" },
+    { number: 3, label: "Identidade" },
+    { number: 4, label: "Selfie" },
+    { number: 5, label: "Revisão" },
+  ]
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
@@ -42,22 +55,18 @@ export function KYCVerification() {
     setCurrentStep(step)
   }
 
-  const steps = [
-    { number: 1, label: "Informações Pessoais" },
-    { number: 2, label: "Endereço" },
-    { number: 3, label: "Identidade" },
-    { number: 4, label: "Selfie" },
-    { number: 5, label: "Revisão" },
-  ]
-
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
+  const handleNext = async () => {
+    const isValid = await validateStep(currentStep)
+    if (isValid) {
       nextStep()
     }
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault()
     setIsSubmitting(true)
+    
+    onSubmit()
 
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
@@ -78,13 +87,13 @@ export function KYCVerification() {
         '<': () => !isFirstStep && prevStep(),
         'f': () => firstFieldRef.current?.focus(),
         'F': () => firstFieldRef.current?.focus(),
-        's': () => isLastStep && handleSubmit(),
-        'S': () => isLastStep && handleSubmit()
+        's': handleSubmitShortcut,
+        'S': handleSubmitShortcut
       }
 
       const codeShortcuts: Record<string, () => void> = {
-        'Period': () => !isLastStep && handleNext(), // . (ponto) com Shift = >
-        'Comma': () => !isFirstStep && prevStep(),   // , (vírgula) com Shift = <
+        'Period': () => !isLastStep && handleNext(), 
+        'Comma': () => !isFirstStep && prevStep(),
       }
 
       const action = shortcuts[event.key] || codeShortcuts[event.code]
@@ -97,6 +106,19 @@ export function KYCVerification() {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [currentStep, isFirstStep, isLastStep])
+
+  function handleSubmitShortcut() {
+    if (isLastStep) {
+      handleSubmit()
+      return
+    }
+
+    toast({
+      title: "Não é possível submeter",
+      description: "Complete todas as etapas antes de submeter o formulário", 
+      variant: "destructive"
+    })
+  }
 
   if (isSubmitted) {
     return (
@@ -156,74 +178,92 @@ export function KYCVerification() {
               <ProgressSteps steps={steps} currentStep={currentStep} onStepClick={goToStep} />
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              className="rounded-lg bg-card p-4 shadow-sm md:p-6 lg:p-8"
-            >
-              <AnimatePresence mode="wait">
+            <form onSubmit={onSubmit}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="rounded-lg bg-card p-4 shadow-sm md:p-6 lg:p-8"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentStep}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {currentStep === 1 && (
+                      <PersonalInfoStep
+                        data={formData.personalInfo}
+                        onChange={updatePersonalInfo}
+                        errors={errors}
+                        firstFieldRef={firstFieldRef}
+                        onNext={handleNext}
+                      />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+
                 <motion.div
-                  key={currentStep}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-6 flex flex-col-reverse items-center justify-between gap-4 sm:flex-row md:mt-8"
                 >
-                  {currentStep === 1 && (
-                    <PersonalInfoStep
-                      data={formData.personalInfo}
-                      onChange={updatePersonalInfo}
-                      errors={errors}
-                      firstFieldRef={firstFieldRef}
-                    />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevStep}
+                    disabled={isFirstStep}
+                    className="w-full bg-transparent sm:w-auto sm:min-w-[120px]"
+                  >
+                    Voltar
+                  </Button>
+
+                  {!isLastStep ? (
+                    <Button
+                      type="button"
+                      onClick={handleNext}
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto sm:min-w-[120px]"
+                    >
+                      Continuar
+                    </Button>
+                  ) : (
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto sm:min-w-[120px]"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Enviando...
+                        </>
+                      ) : (
+                        "Enviar"
+                      )}
+                    </Button>
                   )}
                 </motion.div>
-              </AnimatePresence>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="mt-6 flex flex-col-reverse items-center justify-between gap-4 sm:flex-row md:mt-8"
-              >
-                <Button
-                  variant="outline"
-                  onClick={prevStep}
-                  disabled={isFirstStep}
-                  className="w-full bg-transparent sm:w-auto sm:min-w-[120px]"
-                >
-                  Voltar
-                </Button>
-
-                {!isLastStep ? (
-                  <Button
-                    onClick={handleNext}
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto sm:min-w-[120px]"
-                  >
-                    Continuar
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto sm:min-w-[120px]"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Enviando...
-                      </>
-                    ) : (
-                      "Enviar"
-                    )}
-                  </Button>
-                )}
               </motion.div>
-            </motion.div>
+            </form>
           </div>
         </div>
       </main>
+      
+      <ToastContainer>
+        {toasts.map((toastItem) => (
+          <Toast
+            key={toastItem.id}
+            id={toastItem.id}
+            title={toastItem.title}
+            description={toastItem.description}
+            variant={toastItem.variant}
+            onDismiss={dismiss}
+          />
+        ))}
+      </ToastContainer>
     </div>
   )
 }

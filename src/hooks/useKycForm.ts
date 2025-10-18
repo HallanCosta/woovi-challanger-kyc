@@ -1,7 +1,11 @@
-import { useState, useCallback } from "react"
-import type { KYCFormData, ValidationErrors } from "@/lib/types"
-import { validatePersonalInfo, validateField } from "@/lib/validation"
-import { useFieldValidation } from "./useFieldValidaction"
+import { useCallback, useEffect, useRef } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import type { KYCFormData } from "@/lib/types"
+import { 
+  kycFormDataSchema,
+  type PersonalInfo,
+} from "@/lib/validation"
 
 const initialFormData: KYCFormData = {
   personalInfo: {
@@ -31,59 +35,100 @@ const initialFormData: KYCFormData = {
 }
 
 export function useKYCForm() {
-  const [formData, setFormData] = useState<KYCFormData>(initialFormData)
-  const [errors, setErrors] = useState<ValidationErrors>({})
+  const form = useForm<KYCFormData>({
+    resolver: zodResolver(kycFormDataSchema),
+    defaultValues: initialFormData,
+    mode: "onBlur",
+    reValidateMode: "onChange",
+    delayError: 1000,
+  })
 
-  const {
-    fieldErrors,
-    validateField: validateFieldRealtime,
-    setErrors: setFieldErrors,
-  } = useFieldValidation((fieldName, value, allData) => validateField(fieldName, value, allData), 300)
+  const { 
+    handleSubmit, 
+    watch, 
+    setValue, 
+    getValues, 
+    formState: { errors, isValid, isDirty },
+    reset,
+    trigger
+  } = form
+
+  const formData = watch()
+
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const updatePersonalInfo = useCallback(
-    (data: Partial<KYCFormData["personalInfo"]>) => {
-      setFormData((prev) => {
-        const newData = {
-          ...prev,
-          personalInfo: { ...prev.personalInfo, ...data },
-        }
-
-        Object.keys(data).forEach((key) => {
-          validateFieldRealtime(key, data[key as keyof typeof data], newData.personalInfo)
-        })
-
-        return newData
+    (data: Partial<PersonalInfo>) => {
+      setValue("personalInfo", { ...formData.personalInfo, ...data }, { 
+        shouldValidate: false,
+        shouldDirty: true 
       })
+
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current)
+      }
+
+      debounceTimeoutRef.current = setTimeout(() => {
+        trigger("personalInfo")
+      }, 500)
     },
-    [validateFieldRealtime],
+    [setValue, formData.personalInfo, trigger]
   )
 
   const validateStep = useCallback(
-    (step: number): boolean => {
-      let stepErrors: ValidationErrors = {}
-
-      if (step === 1) {
-        stepErrors = validatePersonalInfo(formData.personalInfo)
+    async (step: number): Promise<boolean> => {
+      const stepToFieldsMap: Record<number, keyof KYCFormData> = {
+        1: "personalInfo",
+        2: "addressInfo", 
+        3: "identityInfo",
+        4: "selfieInfo",
+        5: "termsAccepted"
       }
 
-      const mergedErrors = { ...fieldErrors, ...stepErrors }
-      setErrors(mergedErrors)
-      setFieldErrors(mergedErrors)
-      return Object.keys(mergedErrors).length === 0
+      const field = stepToFieldsMap[step]
+      if (!field) return false
+
+      return trigger([field])
     },
-    [formData, fieldErrors, setFieldErrors],
+    [trigger]
   )
 
   const resetForm = useCallback(() => {
-    setFormData(initialFormData)
-    setErrors({})
+    reset(initialFormData)
+  }, [reset])
+
+  const onSubmit = useCallback(
+    (data: KYCFormData) => {
+      console.log("Form submitted:", data)
+    },
+    []
+  )
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current)
+      }
+    }
   }, [])
 
   return {
     formData,
+    
     updatePersonalInfo,
+    
     validateStep,
     resetForm,
-    errors
+    
+    errors,
+    isValid,
+    isDirty,
+    
+    handleSubmit,
+    setValue,
+    getValues,
+    trigger,
+    
+    onSubmit: handleSubmit(onSubmit)
   }
 }
