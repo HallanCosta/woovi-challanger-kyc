@@ -183,3 +183,13 @@
 .shake {
   animation: shake 0.5s ease-in-out;
 }
+
+/* Fix for date input calendar icon in dark mode */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.dark input[type="date"]::-webkit-inner-spin-button,
+.dark input[type="date"]::-webkit-outer-spin-button {
+  filter: invert(1);
+}
