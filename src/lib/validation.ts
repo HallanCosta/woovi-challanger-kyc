@@ -5,6 +5,21 @@ export function validateEmail(email: string): boolean {
   return emailRegex.test(email)
 }
 
+export function validateFullName(fullName: string): boolean {
+  const trimmedName = fullName.trim()
+  if (trimmedName.length < 3) {
+    return false
+  }
+  
+  const nameParts = trimmedName.split(/\s+/).filter(part => part.length > 0)
+  
+  if (nameParts.length < 2) {
+    return false
+  }
+  
+  return nameParts.every(part => part.length >= 2)
+}
+
 export function validatePhone(phone: string, country?: string): boolean {
   const cleanPhone = phone.replace(/[\s\-+()]/g, "")
 
@@ -51,8 +66,8 @@ export function validatePersonalInfo(data: PersonalInfo): ValidationErrors {
 
   if (!data.fullName.trim()) {
     errors.fullName = "Full name is required"
-  } else if (data.fullName.trim().length < 3) {
-    errors.fullName = "Full name must be at least 3 characters"
+  } else if (!validateFullName(data.fullName)) {
+    errors.fullName = "Please enter your full name with at least first and last name"
   }
 
   if (!data.email.trim()) {
@@ -87,7 +102,7 @@ export function validateField(fieldName: string, value: any, allData?: any): str
   switch (fieldName) {
     case "fullName":
       if (!value?.trim()) return "Full name is required"
-      if (value.trim().length < 3) return "Full name must be at least 3 characters"
+      if (!validateFullName(value)) return "Please enter your full name with at least first and last name"
       return null
 
     case "email":

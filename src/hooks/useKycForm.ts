@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react"
-import type { KYCFormData, PersonalInfo, ValidationErrors } from "@/lib/types"
+import type { KYCFormData, ValidationErrors } from "@/lib/types"
 import { validatePersonalInfo, validateField } from "@/lib/validation"
 import { useFieldValidation } from "./useFieldValidaction"
 
