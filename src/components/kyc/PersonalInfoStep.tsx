@@ -5,6 +5,8 @@ import { FormField } from "@/components/ui/FormField"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
 import { COUNTRIES } from "@/constants/countries"
 import type { PersonalInfo, ValidationErrors } from "@/lib/types"
+import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils/phoneFormatter"
+
 
 interface PersonalInfoStepProps {
   data: PersonalInfo
@@ -14,8 +16,16 @@ interface PersonalInfoStepProps {
 
 export function PersonalInfoStep({ data, errors, onChange }: PersonalInfoStepProps) {
   const handlePhoneChange = (value: string) => {
-    onChange({ phone: value })
+    if (!data.country) return
+    const formatted = formatPhoneNumber(value, data.country)
+    onChange({ phone: formatted })
   }
+
+  const handleCountryChange = (value: string) => {
+    onChange({ country: value, phone: "" })
+  }
+
+  const phoneFormat = data.country ? getPhoneFormat(data.country) : null
 
   return (
     <div className="space-y-6">
@@ -43,7 +53,7 @@ export function PersonalInfoStep({ data, errors, onChange }: PersonalInfoStepPro
         </FormField>
 
         <FormField label="País" error={errors.country} required>
-          <Select value={data.country} onValueChange={(value) => onChange({ country: value })}>
+          <Select value={data.country} onValueChange={handleCountryChange}>
             <SelectTrigger>
               <SelectValue placeholder="Selecione seu país" />
             </SelectTrigger>
@@ -59,10 +69,14 @@ export function PersonalInfoStep({ data, errors, onChange }: PersonalInfoStepPro
 
         <FormField label="Telefone" error={errors.phone} required>
           <Input
-            type="tel"
             value={data.phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            placeholder="Digite seu telefone"
+            placeholder={phoneFormat?.placeholder || "Digite seu telefone"}
+            maxLength={phoneFormat?.maxLength}
+            type="tel"
+            disabled={!data.country}
+            aria-invalid={!!errors.phone}
+            aria-describedby={!data.country ? "phone-helper" : undefined}
           />
         </FormField>
 
