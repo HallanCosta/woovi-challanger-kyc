@@ -199,7 +199,6 @@ export function KycVerification() {
                         onChange={updatePersonalInfo}
                         errors={errors}
                         firstFieldRef={firstFieldRef}
-                        onNext={handleNext}
                       />
                     )}
                   </motion.div>
