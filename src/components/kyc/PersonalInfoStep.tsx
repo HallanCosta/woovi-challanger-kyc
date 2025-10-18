@@ -2,14 +2,17 @@
 
 import { Input } from "@/components/ui/Input"
 import { FormField } from "@/components/ui/FormField"
-import type { PersonalInfo } from "@/lib/types"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
+import { COUNTRIES } from "@/constants/countries"
+import type { PersonalInfo, ValidationErrors } from "@/lib/types"
 
 interface PersonalInfoStepProps {
   data: PersonalInfo
+  errors: ValidationErrors
   onChange: (data: Partial<PersonalInfo>) => void
 }
 
-export function PersonalInfoStep({ data, onChange }: PersonalInfoStepProps) {
+export function PersonalInfoStep({ data, errors, onChange }: PersonalInfoStepProps) {
   const handlePhoneChange = (value: string) => {
     onChange({ phone: value })
   }
@@ -22,7 +25,7 @@ export function PersonalInfoStep({ data, onChange }: PersonalInfoStepProps) {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <FormField label="Nome Completo" required className="md:col-span-2">
+        <FormField label="Nome Completo" error={errors.fullName} required className="md:col-span-2">
           <Input
             value={data.fullName}
             onChange={(e) => onChange({ fullName: e.target.value })}
@@ -30,7 +33,7 @@ export function PersonalInfoStep({ data, onChange }: PersonalInfoStepProps) {
           />
         </FormField>
 
-        <FormField label="Email" required>
+        <FormField label="Email" error={errors.email} required>
           <Input
             type="email"
             value={data.email}
@@ -39,7 +42,22 @@ export function PersonalInfoStep({ data, onChange }: PersonalInfoStepProps) {
           />
         </FormField>
 
-        <FormField label="Telefone" required>
+        <FormField label="País" error={errors.country} required>
+          <Select value={data.country} onValueChange={(value) => onChange({ country: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione seu país" />
+            </SelectTrigger>
+            <SelectContent>
+              {COUNTRIES.map((country) => (
+                <SelectItem key={country} value={country}>
+                  {country}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FormField>
+
+        <FormField label="Telefone" error={errors.phone} required>
           <Input
             type="tel"
             value={data.phone}
@@ -48,7 +66,7 @@ export function PersonalInfoStep({ data, onChange }: PersonalInfoStepProps) {
           />
         </FormField>
 
-        <FormField label="Data de Nascimento" required>
+        <FormField label="Data de Nascimento" error={errors.dateOfBirth} required>
           <Input
             type="date"
             value={data.dateOfBirth}

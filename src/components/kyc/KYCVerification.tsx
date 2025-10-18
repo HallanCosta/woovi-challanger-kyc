@@ -13,6 +13,8 @@ export function KYCVerification() {
   const {
     formData,
     updatePersonalInfo,
+    errors,
+    validateStep
   } = useKYCForm()
 
   const [currentStep, setCurrentStep] = useState(1)
@@ -48,7 +50,9 @@ export function KYCVerification() {
   ]
 
   const handleNext = () => {
-    nextStep()
+    if (validateStep(currentStep)) {
+      nextStep()
+    }
   }
 
   const handleSubmit = async () => {
@@ -136,6 +140,7 @@ export function KYCVerification() {
                     <PersonalInfoStep
                       data={formData.personalInfo}
                       onChange={updatePersonalInfo}
+                      errors={errors}
                     />
                   )}
                 </motion.div>

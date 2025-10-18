@@ -1,5 +1,5 @@
 
-export interface PersonalInfo {
+export type PersonalInfo = {
   fullName: string
   email: string
   phone: string
@@ -7,7 +7,7 @@ export interface PersonalInfo {
   country: string
 }
 
-export interface AddressInfo {
+export type AddressInfo = {
   street: string
   city: string
   state: string
@@ -15,21 +15,25 @@ export interface AddressInfo {
   addressProof: File | null
 }
 
-export interface IdentityInfo {
+export type IdentityInfo = {
   idType: "passport" | "drivers-license" | "rg" | ""
   idNumber: string
   idFront: File | null
   idBack: File | null
 }
 
-export interface SelfieInfo {
+export type SelfieInfo = {
   selfie: File | null
 }
 
-export interface KYCFormData {
+export type KYCFormData = {
   personalInfo: PersonalInfo
   addressInfo: AddressInfo
   identityInfo: IdentityInfo
   selfieInfo: SelfieInfo
   termsAccepted: boolean
+}
+
+export type ValidationErrors = {
+  [key: string]: string
 }

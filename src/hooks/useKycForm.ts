@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react"
-import type { KYCFormData, PersonalInfo } from "@/lib/types"
+import type { KYCFormData, PersonalInfo, ValidationErrors } from "@/lib/types"
+import { validatePersonalInfo, validateField } from "@/lib/validation"
+import { useFieldValidation } from "./useFieldValidaction"
 
 const initialFormData: KYCFormData = {
   personalInfo: {
@@ -30,26 +32,51 @@ const initialFormData: KYCFormData = {
 
 export function useKYCForm() {
   const [formData, setFormData] = useState<KYCFormData>(initialFormData)
+  const [errors, setErrors] = useState<ValidationErrors>({})
+
+  const {
+    fieldErrors,
+    validateField: validateFieldRealtime,
+    setErrors: setFieldErrors,
+  } = useFieldValidation((fieldName, value, allData) => validateField(fieldName, value, allData), 300)
 
   const updatePersonalInfo = useCallback(
-    (data: Partial<PersonalInfo>) => {
-      setFormData((prev) => ({
-        ...prev,
-        personalInfo: { ...prev.personalInfo, ...data },
-      }))
+    (data: Partial<KYCFormData["personalInfo"]>) => {
+      setFormData((prev) => {
+        const newData = {
+          ...prev,
+          personalInfo: { ...prev.personalInfo, ...data },
+        }
+
+        Object.keys(data).forEach((key) => {
+          validateFieldRealtime(key, data[key as keyof typeof data], newData.personalInfo)
+        })
+
+        return newData
+      })
     },
-    [],
+    [validateFieldRealtime],
   )
 
   const validateStep = useCallback(
-    (_step: number): boolean => {
-      return true
+    (step: number): boolean => {
+      let stepErrors: ValidationErrors = {}
+
+      if (step === 1) {
+        stepErrors = validatePersonalInfo(formData.personalInfo)
+      }
+
+      const mergedErrors = { ...fieldErrors, ...stepErrors }
+      setErrors(mergedErrors)
+      setFieldErrors(mergedErrors)
+      return Object.keys(mergedErrors).length === 0
     },
-    [formData],
+    [formData, fieldErrors, setFieldErrors],
   )
 
   const resetForm = useCallback(() => {
     setFormData(initialFormData)
+    setErrors({})
   }, [])
 
   return {
@@ -57,5 +84,6 @@ export function useKYCForm() {
     updatePersonalInfo,
     validateStep,
     resetForm,
+    errors
   }
 }
