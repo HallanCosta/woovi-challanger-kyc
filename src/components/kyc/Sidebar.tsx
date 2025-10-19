@@ -15,22 +15,24 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { cn } from "@/lib/utils"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: Users, label: "Contas", active: false },
-  { icon: DollarSign, label: "Depósito", active: false },
-  { icon: ArrowRightLeft, label: "Transferência", active: false },
-  { icon: ArrowDownToLine, label: "Saque", active: false },
-  { icon: Share2, label: "Afiliado", active: false },
-  { icon: Trophy, label: "Rankings", active: false },
-  { icon: HelpCircle, label: "FAQ", active: false },
-  { icon: Mail, label: "Contato", active: false },
-  { icon: FileText, label: "Documentos", active: false },
+  { icon: LayoutDashboard, key: "dashboard", active: true },
+  { icon: Users, key: "accounts", active: false },
+  { icon: DollarSign, key: "deposit", active: false },
+  { icon: ArrowRightLeft, key: "transfer", active: false },
+  { icon: ArrowDownToLine, key: "withdraw", active: false },
+  { icon: Share2, key: "affiliate", active: false },
+  { icon: Trophy, key: "leaderboards", active: false },
+  { icon: HelpCircle, key: "faq", active: false },
+  { icon: Mail, key: "contactUs", active: false },
+  { icon: FileText, key: "legalDocuments", active: false },
 ]
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { t } = useTranslation()
 
   const sidebarContent = (
     <div className="flex h-full flex-col">
@@ -54,19 +56,19 @@ export function Sidebar() {
           size="icon"
           onClick={() => setIsOpen(false)}
           className="lg:hidden"
-          aria-label="Fechar menu"
+          aria-label={t("closeMenu")}
         >
           <X className="h-5 w-5 text-sidebar-foreground" />
         </Button>
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto p-4">
-        <p className="mb-2 px-3 text-xs font-medium text-sidebar-foreground/60">Menu</p>
+        <p className="mb-2 px-3 text-xs font-medium text-sidebar-foreground/60">{t("menu")}</p>
         {menuItems.map((item) => {
           const Icon = item.icon
           return (
             <button
-              key={item.label}
+              key={item.key}
               className={cn(
                 "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
                 item.active
@@ -77,7 +79,7 @@ export function Sidebar() {
               disabled={!item.active}
             >
               <Icon className="h-4 w-4" />
-              {item.label}
+              {t(item.key)}
             </button>
           )
         })}
@@ -92,7 +94,7 @@ export function Sidebar() {
         size="icon"
         onClick={() => setIsOpen(true)}
         className="fixed left-4 top-4 z-50 lg:hidden"
-        aria-label="Abrir menu"
+        aria-label={t("openMenu")}
       >
         <Menu className="h-6 w-6" />
       </Button>

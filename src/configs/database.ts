@@ -1,0 +1,4 @@
+const DATABASE_NAME = '@WOOVI_CHALLENGE_KYC'
+
+// @app:collection
+export const COLLECTION_LANGUAGE = `${DATABASE_NAME}:LANGUAGE`
