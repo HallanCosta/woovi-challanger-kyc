@@ -8,6 +8,13 @@ import path from 'path'
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
   
+  const server = {
+    host: isDev,
+    allowedHosts: isDev ? ["f7b0d0fdee8b.ngrok-free.app"] : undefined // ngrok (somente dev)
+  }
+
+  const workbox = isDev ? { globPatterns: [] } : undefined
+  
   return {
     plugins: [
       react(),
@@ -18,7 +25,7 @@ export default defineConfig(({ mode }) => {
         devOptions: {
           enabled: true,
         },
-        ...(isDev ? { workbox: { globPatterns: [] } } : {}),
+        workbox,
         includeAssets: ['vite.svg'],
         manifest: {
           id: '/',
@@ -42,6 +49,7 @@ export default defineConfig(({ mode }) => {
         }
       })
     ],
+    server,
     preview: {
       allowedHosts: ["kyc.hallancosta.com"],
     },
