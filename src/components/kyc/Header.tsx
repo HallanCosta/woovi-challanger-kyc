@@ -21,6 +21,8 @@ export function Header() {
       void promptInstall()
     }
   }
+ 
+  const shouldShowInstall = isIosManualInstall || (!isInstalled && isInstallable)
 
   return (
     <>
@@ -28,7 +30,7 @@ export function Header() {
         <h1 className="text-lg font-semibold md:text-xl">Verificação KYC</h1>
 
         <div className="flex items-center gap-2 md:gap-3">
-          {!isInstalled && (isInstallable || isIosManualInstall) && (
+          {shouldShowInstall && (
             <Button
               variant="secondary"
               className="w-9 px-0 md:w-auto md:px-4"
