@@ -8,9 +8,21 @@ type BeforeInstallPromptEvent = Event & {
 export function usePwaInstall() {
   const [isInstallable, setIsInstallable] = useState(false)
   const [isInstalled, setIsInstalled] = useState(false)
+  const [isIosManualInstall, setIsIosManualInstall] = useState(false)
   const deferredPromptRef = useRef<BeforeInstallPromptEvent | null>(null)
 
   useEffect(() => {
+    const isStandalone = window.matchMedia?.("(display-mode: standalone)").matches || (window.navigator as any).standalone === true
+    if (isStandalone) {
+      setIsInstalled(true)
+    }
+
+    const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent)
+    if (isIos && !isStandalone) {
+      setIsInstallable(true)
+      setIsIosManualInstall(true)
+    }
+
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault()
       deferredPromptRef.current = e as BeforeInstallPromptEvent
@@ -33,6 +45,7 @@ export function usePwaInstall() {
   }, [])
 
   const promptInstall = useCallback(async () => {
+    if (isIosManualInstall) return false
     const deferredPrompt = deferredPromptRef.current
     if (!deferredPrompt) return false
     await deferredPrompt.prompt()
@@ -40,9 +53,9 @@ export function usePwaInstall() {
     deferredPromptRef.current = null
     setIsInstallable(false)
     return choice.outcome === "accepted"
-  }, [])
+  }, [isIosManualInstall])
 
-  return { isInstallable, isInstalled, promptInstall }
+  return { isInstallable, isInstalled, isIosManualInstall, promptInstall }
 }
 
 
