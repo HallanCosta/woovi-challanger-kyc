@@ -99,7 +99,8 @@ export function Sidebar() {
         <Menu className="h-6 w-6" />
       </Button>
 
-      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[200px] bg-sidebar lg:block">{sidebarContent}</aside>
+      {/* Desktop sidebar width updated to 226px */}
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[226px] bg-sidebar lg:block">{sidebarContent}</aside>
 
       {isOpen && (
         <>
@@ -114,3 +115,5 @@ export function Sidebar() {
     </>
   )
 }
+
+

@@ -35,7 +35,7 @@ export function Header() {
         <div className="flex items-center gap-2 md:gap-3">
           {shouldShowInstall && (
             <Button
-              variant="secondary"
+              variant="primary"
               className="w-9 px-0 md:w-auto md:px-4"
               onClick={handleInstall}
               aria-label={t("installApp")}
