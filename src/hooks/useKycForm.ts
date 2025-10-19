@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
+import type { FieldPath } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+
 import type { KYCFormData } from "@/lib/types"
 import { 
   kycFormDataSchema,
@@ -68,8 +70,19 @@ export function useKYCForm() {
         clearTimeout(debounceTimeoutRef.current)
       }
 
+      const changedKeys = Object.keys(data) as (keyof PersonalInfo)[]
+
+      let fieldsToTrigger = changedKeys.map(key => (
+        `personalInfo.${String(key)}` as FieldPath<KYCFormData>
+      ))
+
+      const isCountryChange = "country" in data && "phone" in data && data.phone === ""
+      if (isCountryChange) {
+        fieldsToTrigger = ["personalInfo.country" as FieldPath<KYCFormData>]
+      }
+
       debounceTimeoutRef.current = setTimeout(() => {
-        trigger("personalInfo")
+        trigger(fieldsToTrigger)
       }, 500)
     },
     [setValue, formData.personalInfo, trigger]
