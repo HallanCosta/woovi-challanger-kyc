@@ -57,6 +57,13 @@ export const translations = {
     installApp: "Install app",
     installAppTitle: "Add to Home Screen",
     installAppMessageIOS: "On iPhone, tap Share → Add to Home Screen.",
+
+    // Keyboard Shortcuts
+    keyboardShortcuts: "Keyboard Shortcuts",
+    shortcutNext: "Go to next step",
+    shortcutPrev: "Go to previous step",
+    shortcutFocusFirst: "Focus first required field",
+    shortcutSubmit: "Submit form (last step)",
   },
   pt: {
     // Generic/Header/Sidebar
@@ -114,6 +121,13 @@ export const translations = {
     installApp: "Instalar app",
     installAppTitle: "Adicionar à Tela de Início",
     installAppMessageIOS: "No iPhone, toque em Compartilhar → Adicionar à Tela de Início.",
+
+    // Keyboard Shortcuts
+    keyboardShortcuts: "Atalhos de Teclado",
+    shortcutNext: "Avançar para o próximo passo",
+    shortcutPrev: "Voltar ao passo anterior",
+    shortcutFocusFirst: "Focar primeiro campo obrigatório",
+    shortcutSubmit: "Enviar formulário (último passo)",
   },
   es: {
     // Generic/Header/Sidebar
@@ -171,5 +185,12 @@ export const translations = {
     installApp: "Instalar app",
     installAppTitle: "Agregar a la pantalla de inicio",
     installAppMessageIOS: "En iPhone, toca Compartir → Agregar a la pantalla de inicio.",
+    
+    // Keyboard Shortcuts
+    keyboardShortcuts: "Atajos de Teclado",
+    shortcutNext: "Avanzar al siguiente paso",
+    shortcutPrev: "Volver al paso anterior",
+    shortcutFocusFirst: "Enfocar el primer campo obligatorio",
+    shortcutSubmit: "Enviar formulario (último paso)",
   },
 }
