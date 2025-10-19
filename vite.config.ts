@@ -42,6 +42,9 @@ export default defineConfig(({ mode }) => {
         }
       })
     ],
+    preview: {
+      allowedHosts: ["kyc.hallancosta.com"],
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src')
