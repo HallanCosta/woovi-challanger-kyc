@@ -9,7 +9,7 @@ export function Header() {
   const { isInstallable, isInstalled, promptInstall } = usePwaInstall()
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background pl-14 pr-4 md:px-6">
       <h1 className="text-lg font-semibold md:text-xl">Verificação KYC</h1>
 
       <div className="flex items-center gap-2 md:gap-3">
@@ -18,9 +18,9 @@ export function Header() {
             <Download className="mr-2 h-4 w-4" /> Instalar
           </Button>
         )}
-        <Button variant="ghost" size="icon" aria-label="Alterar idioma">
+        {/* <Button variant="ghost" size="icon" aria-label="Alterar idioma">
           <Languages className="h-5 w-5" />
-        </Button>
+        </Button> */}
 
         <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Alternar tema">
           {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
