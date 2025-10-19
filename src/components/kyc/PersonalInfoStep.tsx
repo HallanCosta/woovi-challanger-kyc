@@ -10,6 +10,7 @@ import { COUNTRIES } from "@/constants/countries"
 import type { KYCFormData, PersonalInfo } from "@/lib/validation"
 
 import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 type PersonalInfoStepProps = {
   data: PersonalInfo
@@ -19,6 +20,7 @@ type PersonalInfoStepProps = {
 }
 
 export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: PersonalInfoStepProps) {
+  const { t } = useTranslation()
   const handlePhoneChange = (value: string) => {
     if (!data.country) return
     const formatted = formatPhoneNumber(value, data.country)
@@ -35,35 +37,35 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
     <div className="space-y-6">
       <div>
         <div className="flex items-center gap-2">
-          <h2 className="text-2xl font-bold">Informações Pessoais</h2>
+          <h2 className="text-2xl font-bold">{t("personalInformation")}</h2>
           <KeyboardShortcutsTooltip />
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">Forneça seus dados pessoais básicos</p>
+        <p className="mt-2 text-sm text-muted-foreground">{t("providePersonalDetails")}</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <FormField label="Nome Completo" error={errors.personalInfo?.fullName?.message} required className="md:col-span-2">
+        <FormField label={t("fullName")} error={errors.personalInfo?.fullName?.message} required className="md:col-span-2">
           <Input
             ref={firstFieldRef}
             value={data.fullName}
             onChange={(e) => onChange({ fullName: e.target.value })}
-            placeholder="Digite seu nome completo"
+            placeholder={t("fullNamePlaceholder")}
           />
         </FormField>
 
-        <FormField label="Email" error={errors.personalInfo?.email?.message} required>
+        <FormField label={t("email")} error={errors.personalInfo?.email?.message} required>
           <Input
             type="email"
             value={data.email}
             onChange={(e) => onChange({ email: e.target.value })}
-            placeholder="Digite seu email"
+            placeholder={t("emailPlaceholder")}
           />
         </FormField>
 
-        <FormField label="País" error={errors.personalInfo?.country?.message} required>
+        <FormField label={t("country")} error={errors.personalInfo?.country?.message} required>
           <Select value={data.country} onValueChange={handleCountryChange}>
             <SelectTrigger>
-              <SelectValue placeholder="Selecione seu país" />
+              <SelectValue placeholder={t("selectCountry")} />
             </SelectTrigger>
             <SelectContent>
               {COUNTRIES.map((country) => (
@@ -75,20 +77,20 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
           </Select>
         </FormField>
 
-        <FormField label="Telefone" error={errors.personalInfo?.phone?.message} required>
+        <FormField label={t("phone")} error={errors.personalInfo?.phone?.message} required>
           <Input
             value={data.phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            placeholder={phoneFormat?.placeholder || "Digite seu telefone"}
+            placeholder={phoneFormat?.placeholder || t("phonePlaceholder")}
             maxLength={phoneFormat?.maxLength}
             type="tel"
             disabled={!data.country}
             aria-invalid={!!errors.personalInfo?.phone}
-            aria-describedby={!data.country ? "phone-helper" : undefined}
+            aria-describedby={!data.country ? t("selectCountryFirst") : undefined}
           />
         </FormField>
 
-        <FormField label="Data de Nascimento" error={errors.personalInfo?.dateOfBirth?.message} required>
+        <FormField label={t("dateOfBirth")} error={errors.personalInfo?.dateOfBirth?.message} required>
           <Input
             type="date"
             value={data.dateOfBirth}

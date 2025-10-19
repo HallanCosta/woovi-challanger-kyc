@@ -11,6 +11,7 @@ import { Toast, ToastContainer } from "@/components/ui/Toast"
 
 import { useKYCForm } from "@/hooks/useKycForm"
 import { useToast } from "@/hooks/useToast"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 export function KycVerification() {
   const {
@@ -27,16 +28,17 @@ export function KycVerification() {
   const firstFieldRef = useRef<HTMLInputElement>(null)
 
   const { toasts, toast, dismiss } = useToast()
+  const { t } = useTranslation()
 
   const totalSteps = 5
   const isFirstStep = currentStep === 1
   const isLastStep = currentStep === totalSteps
   const steps = [
-    { number: 1, label: "Informações Pessoais" },
-    { number: 2, label: "Endereço" },
-    { number: 3, label: "Identidade" },
-    { number: 4, label: "Selfie" },
-    { number: 5, label: "Revisão" },
+    { number: 1, label: t("personalInfo") },
+    { number: 2, label: t("address") },
+    { number: 3, label: t("identity") },
+    { number: 4, label: t("selfie") },
+    { number: 5, label: t("review") },
   ]
 
   const nextStep = () => {
@@ -114,8 +116,8 @@ export function KycVerification() {
     }
 
     toast({
-      title: "Não é possível submeter",
-      description: "Complete todas as etapas antes de submeter o formulário", 
+      title: t("submit"),
+      description: t("reviewInformation"), 
       variant: "destructive"
     })
   }
@@ -143,8 +145,8 @@ export function KycVerification() {
                   <CheckCircle2 className="h-10 w-10 text-success" />
                 </div>
               </motion.div>
-              <h2 className="mb-3 text-2xl font-bold">Verificação Enviada</h2>
-              <p className="mb-6 text-muted-foreground">Enviado com sucesso!</p>
+              <h2 className="mb-3 text-2xl font-bold">{t("verificationSubmitted")}</h2>
+              <p className="mb-6 text-muted-foreground">{t("submittedSuccessfully")}</p>
               <Button
                 onClick={() => {
                   setIsSubmitted(false)
@@ -152,7 +154,7 @@ export function KycVerification() {
                 }}
                 variant="outline"
               >
-                Enviar Outro
+                {t("submitAnother")}
               </Button>
             </div>
           </motion.div>
@@ -217,7 +219,7 @@ export function KycVerification() {
                     disabled={isFirstStep}
                     className="w-full bg-transparent sm:w-auto sm:min-w-[120px]"
                   >
-                    Voltar
+                    {t("back")}
                   </Button>
 
                   {!isLastStep ? (
@@ -226,7 +228,7 @@ export function KycVerification() {
                       onClick={handleNext}
                       className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto sm:min-w-[120px]"
                     >
-                      Continuar
+                      {t("continue")}
                     </Button>
                   ) : (
                     <Button
@@ -237,10 +239,10 @@ export function KycVerification() {
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Enviando...
+                          {t("submitting")}
                         </>
                       ) : (
-                        "Enviar"
+                        t("submit")
                       )}
                     </Button>
                   )}
