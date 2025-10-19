@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 import { HelpCircle, X } from "lucide-react"
 
 import { useTranslation } from "@/lib/i18n/useTranslation"
@@ -28,6 +29,17 @@ export function KeyboardShortcuts() {
     }
   }, [])
 
+  const KeyCombo = ({ keys }: { keys: string[] }) => (
+    <span className="ml-auto flex items-center">
+      {keys.map((key, index) => (
+        <span key={`${key}-${index}`} className="flex items-center">
+          {index > 0 && <span className="px-1 text-muted-foreground/80">+</span>}
+          <kbd className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs font-medium">{key}</kbd>
+        </span>
+      ))}
+    </span>
+  )
+
   return (
     <div ref={containerRef} className="relative inline-block ml-auto">
       <button
@@ -41,12 +53,17 @@ export function KeyboardShortcuts() {
         <HelpCircle className="h-5 w-5" />
       </button>
 
-      {open && (
-        <div
-          role="dialog"
-          aria-label={t("keyboardShortcuts")}
-          className="absolute right-0 z-50 mt-2 w-72 rounded-md border bg-popover p-3 text-popover-foreground shadow-md"
-        >
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="dialog"
+            aria-label={t("keyboardShortcuts")}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute right-0 z-50 mt-2 w-[300px] rounded-md border bg-popover p-3 text-popover-foreground shadow-md"
+          >
           <div className="mb-2 flex items-center justify-between">
             <h4 className="text-sm font-semibold">{t("keyboardShortcuts")}</h4>
             <button
@@ -62,23 +79,24 @@ export function KeyboardShortcuts() {
           <div className="space-y-1 text-xs">
             <div className="flex items-center justify-between">
               <span>{t("shortcutNext")}</span>
-              <kbd className="inline-block rounded bg-muted px-1.5 py-0.5 text-xs ml-auto">Alt+Shift+&gt;</kbd>
+              <KeyCombo keys={["Alt", "Shift", ">"]} />
             </div>
             <div className="flex items-center justify-between">
               <span>{t("shortcutPrev")}</span>
-              <kbd className="inline-block rounded bg-muted px-1.5 py-0.5 text-xs ml-auto">Alt+Shift+&lt;</kbd>
+              <KeyCombo keys={["Alt", "Shift", "<"]} />
             </div>
             <div className="flex items-center justify-between">
               <span>{t("shortcutFocusFirst")}</span>
-              <kbd className="inline-block rounded bg-muted px-1.5 py-0.5 text-xs ml-auto">Alt+F</kbd>
+              <KeyCombo keys={["Alt", "F"]} />
             </div>
             <div className="flex items-center justify-between">
               <span>{t("shortcutSubmit")}</span>
-              <kbd className="inline-block rounded bg-muted px-1.5 py-0.5 text-xs ml-auto">Alt+S</kbd>
+              <KeyCombo keys={["Alt", "S"]} />
             </div>
           </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
