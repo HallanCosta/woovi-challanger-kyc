@@ -17,3 +17,13 @@ createRoot(document.getElementById('root')!).render(
     </ThemeProvider>
   </StrictMode>
 )
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.getRegistration().then((reg) => {
+      if (!reg) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {})
+      }
+    })
+  })
+}
