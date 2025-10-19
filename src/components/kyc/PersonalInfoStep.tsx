@@ -81,7 +81,7 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
           <Input
             value={data.phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
-            placeholder={phoneFormat?.placeholder || t("phonePlaceholder")}
+            placeholder={!data.country ? t("selectCountryFirst") : (phoneFormat?.placeholder || t("phonePlaceholder"))}
             maxLength={phoneFormat?.maxLength}
             type="tel"
             disabled={!data.country}
