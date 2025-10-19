@@ -1,0 +1,40 @@
+name: 🚀 Deploy to Production 
+
+on:
+  workflow_dispatch:
+  # push:
+   # branches:
+   #  - main
+
+jobs:
+  deploy:
+    name: 🚀 Deployment to Production
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 👷 Building
+        run: |
+          npm install -g pnpm@10.0.0 &&
+          pnpm install &&
+          pnpm build
+
+      - name: 🚀 Deploy to Production server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.PRODUCTION_SSH_PRIVATE_KEY }}
+          ARGS: '-rlgoDzvc -i'
+          SOURCE: '.'
+          REMOTE_HOST: ${{ secrets.PRODUCTION_HOST }}
+          REMOTE_USER: ${{ secrets.PRODUCTION_SUDO_USERNAME }}
+          EXCLUDE: '/.docker/, /k6/, docker-compose.yml'
+          TARGET: ${{ secrets.PRODUCTION_PROJECT_DIR }}
+          SCRIPT_AFTER: |
+            cd ${{ secrets.PRODUCTION_PROJECT_DIR }}
+            export PATH=$HOME/.nvm/versions/node/v22.20.0/bin:$PATH
+            echo "Restarting production server with PNPM..."
+            pnpm restart:production
