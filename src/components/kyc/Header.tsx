@@ -18,9 +18,9 @@ export function Header() {
             <Download className="mr-2 h-4 w-4" /> Instalar
           </Button>
         )}
-        <Button variant="ghost" size="icon" aria-label="Alterar idioma">
+        {/* <Button variant="ghost" size="icon" aria-label="Alterar idioma">
           <Languages className="h-5 w-5" />
-        </Button>
+        </Button> */}
 
         <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Alternar tema">
           {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
