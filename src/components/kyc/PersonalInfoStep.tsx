@@ -3,7 +3,7 @@ import type { FieldErrors } from "react-hook-form"
 import { Input } from "@/components/ui/Input"
 import { FormField } from "@/components/ui/FormField"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
-import { KeyboardShortcutsTooltip } from "@/components/kyc/KeyboardShortcutsTooltip"
+import { KeyboardShortcuts } from "@/components/kyc/KeyboardShortcuts"
 
 import { COUNTRIES } from "@/constants/countries"
 
@@ -38,7 +38,7 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
       <div>
         <div className="flex items-center gap-2">
           <h2 className="text-2xl font-bold">{t("personalInformation")}</h2>
-          <KeyboardShortcutsTooltip />
+          <KeyboardShortcuts />
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{t("providePersonalDetails")}</p>
       </div>
