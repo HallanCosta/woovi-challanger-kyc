@@ -9,7 +9,7 @@ import { COUNTRIES } from "@/constants/countries"
 
 import type { KYCFormData, PersonalInfo } from "@/lib/validation"
 
-import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils/phoneFormatter"
+import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils"
 
 type PersonalInfoStepProps = {
   data: PersonalInfo
