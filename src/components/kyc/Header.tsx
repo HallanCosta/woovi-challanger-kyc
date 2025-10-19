@@ -11,32 +11,33 @@ export function Header() {
   const { isInstallable, isInstalled, isIosManualInstall, promptInstall } = usePwaInstall()
   const { toasts, toast, dismiss } = useToast()
 
+  const handleInstall = () => {
+    if (isIosManualInstall) {
+      toast({
+        title: "Adicionar à Tela de Início",
+        description: "No iPhone, toque em Compartilhar → Adicionar à Tela de Início.",
+      })
+    } else {
+      void promptInstall()
+    }
+  }
+
   return (
     <>
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background pl-14 pr-4 md:px-6">
         <h1 className="text-lg font-semibold md:text-xl">Verificação KYC</h1>
 
         <div className="flex items-center gap-2 md:gap-3">
-          {!isInstalled && isInstallable && (
-            <>
-              <Button
-                variant="secondary"
-                size="icon"
-                onClick={() => {
-                  if (isIosManualInstall) {
-                    toast({
-                      title: "Adicionar à Tela de Início",
-                      description: "No iPhone, toque em Compartilhar → Adicionar à Tela de Início.",
-                    })
-                  } else {
-                    void promptInstall()
-                  }
-                }}
-                aria-label="Instalar app"
-              >
-                <Download className="h-4 w-4" />
-              </Button>
-            </>
+          {!isInstalled && (isInstallable || isIosManualInstall) && (
+            <Button
+              variant="secondary"
+              className="w-9 px-0 md:w-auto md:px-4"
+              onClick={handleInstall}
+              aria-label="Instalar app"
+            >
+              <Download className="h-4 w-4 md:mr-2" />
+              <span className="hidden md:inline">Instalar</span>
+            </Button>
           )}
           {/* <Button variant="ghost" size="icon" aria-label="Alterar idioma">
             <Languages className="h-5 w-5" />
