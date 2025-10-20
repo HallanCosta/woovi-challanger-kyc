@@ -1,6 +1,8 @@
 import type React from "react"
-import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
+
+import { cn } from "@/lib/utils"
+import { useTranslation } from "@/lib/i18n/useTranslation"
 
 interface FormFieldProps {
   label: string
@@ -11,6 +13,7 @@ interface FormFieldProps {
 }
 
 export function FormField({ label, error, required, children, className }: FormFieldProps) {
+  const { t } = useTranslation()
   const [shouldShake, setShouldShake] = useState(false)
 
   useEffect(() => {
@@ -30,7 +33,7 @@ export function FormField({ label, error, required, children, className }: FormF
       {children}
       {error && (
         <p className="text-sm text-error" role="alert">
-          {error}
+          {t(error)}
         </p>
       )}
     </div>

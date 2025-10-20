@@ -2,6 +2,35 @@ export type Language = "en" | "pt" | "es"
 
 export const translations = {
   en: {
+    // Validation
+    validation: {
+      email: { invalid: "Please enter a valid email address" },
+      fullName: {
+        required: "Full name is required",
+        format: "Please enter your full name with at least first and last name",
+      },
+      dateOfBirth: {
+        required: "Date of birth is required",
+        minAge: "You must be at least 18 years old",
+        invalid: "Invalid date of birth",
+      },
+      phone: {
+        required: "Phone number is required",
+        invalid: "Please enter a valid phone number",
+      },
+      country: { required: "Country is required" },
+      address: {
+        street: { required: "Street is required" },
+        city: { required: "City is required" },
+        state: { required: "State is required" },
+        postalCode: { required: "Postal code is required" },
+      },
+      identity: {
+        idType: { required: "Please select an ID type" },
+        idNumber: { required: "ID number is required" },
+      },
+      terms: { accept: "You must accept the terms and conditions" },
+    },
     // Generic/Header/Sidebar
     menu: "Menu",
     dashboard: "Dashboard",
@@ -65,6 +94,35 @@ export const translations = {
     shortcutTab: "Navigate fields",
   },
   pt: {
+    // Validation
+    validation: {
+      email: { invalid: "Informe um e-mail válido" },
+      fullName: {
+        required: "Nome completo é obrigatório",
+        format: "Informe nome e sobrenome (mínimo duas palavras)",
+      },
+      dateOfBirth: {
+        required: "Data de nascimento é obrigatória",
+        minAge: "Você deve ter pelo menos 18 anos",
+        invalid: "Data de nascimento inválida",
+      },
+      phone: {
+        required: "Número de telefone é obrigatório",
+        invalid: "Informe um número de telefone válido",
+      },
+      country: { required: "País é obrigatório" },
+      address: {
+        street: { required: "Rua é obrigatória" },
+        city: { required: "Cidade é obrigatória" },
+        state: { required: "Estado é obrigatório" },
+        postalCode: { required: "CEP é obrigatório" },
+      },
+      identity: {
+        idType: { required: "Selecione um tipo de documento" },
+        idNumber: { required: "Número do documento é obrigatório" },
+      },
+      terms: { accept: "Você deve aceitar os termos e condições" },
+    },
     // Generic/Header/Sidebar
     menu: "Menu",
     dashboard: "Painel",
@@ -128,6 +186,35 @@ export const translations = {
     shortcutTab: "Percorrer campos",
   },
   es: {
+    // Validation
+    validation: {
+      email: { invalid: "Ingrese un correo electrónico válido" },
+      fullName: {
+        required: "El nombre completo es obligatorio",
+        format: "Ingrese nombre y apellido (al menos dos palabras)",
+      },
+      dateOfBirth: {
+        required: "La fecha de nacimiento es obligatoria",
+        minAge: "Debe tener al menos 18 años",
+        invalid: "Fecha de nacimiento inválida",
+      },
+      phone: {
+        required: "El número de teléfono es obligatorio",
+        invalid: "Ingrese un número de teléfono válido",
+      },
+      country: { required: "El país es obligatorio" },
+      address: {
+        street: { required: "La calle es obligatoria" },
+        city: { required: "La ciudad es obligatoria" },
+        state: { required: "El estado es obligatorio" },
+        postalCode: { required: "El código postal es obligatorio" },
+      },
+      identity: {
+        idType: { required: "Seleccione un tipo de documento" },
+        idNumber: { required: "El número de documento es obligatorio" },
+      },
+      terms: { accept: "Debe aceptar los términos y condiciones" },
+    },
     // Generic/Header/Sidebar
     menu: "Menú",
     dashboard: "Panel",
