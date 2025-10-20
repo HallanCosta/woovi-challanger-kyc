@@ -8,6 +8,7 @@ import {
   kycFormDataSchema,
   type PersonalInfo,
 } from "@/lib/validation"
+import { steps as stepsIds, type StepId } from "@/components/kyc/constants/steps"
 
 const initialFormData: KYCFormData = {
   personalInfo: {
@@ -90,17 +91,18 @@ export function useKYCForm() {
 
   const validateStep = useCallback(
     async (step: number): Promise<boolean> => {
-      const stepToFieldsMap: Record<number, keyof KYCFormData> = {
-        1: "personalInfo",
-        2: "addressInfo", 
-        3: "identityInfo",
-        4: "selfieInfo",
-        5: "termsAccepted"
+      const stepId = stepsIds[step - 1]
+      if (!stepId) return false
+
+      const stepToFieldsMap: Record<StepId, keyof KYCFormData> = {
+        personalInfo: "personalInfo",
+        address: "addressInfo",
+        identity: "identityInfo",
+        selfie: "selfieInfo",
+        review: "termsAccepted",
       }
 
-      const field = stepToFieldsMap[step]
-      if (!field) return false
-
+      const field = stepToFieldsMap[stepId]
       return trigger([field])
     },
     [trigger]
@@ -145,3 +147,5 @@ export function useKYCForm() {
     onSubmit: handleSubmit(onSubmit)
   }
 }
+
+
