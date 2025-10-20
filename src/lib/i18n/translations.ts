@@ -60,10 +60,9 @@ export const translations = {
 
     // Keyboard Shortcuts
     keyboardShortcuts: "Keyboard Shortcuts",
-    shortcutNext: "Go to next step",
-    shortcutPrev: "Go to previous step",
-    shortcutFocusFirst: "Focus first required field",
-    shortcutSubmit: "Submit form (last step)",
+    shortcutNext: "Continue/Submit",
+    shortcutPrev: "Back",
+    shortcutTab: "Navigate fields",
   },
   pt: {
     // Generic/Header/Sidebar
@@ -124,10 +123,9 @@ export const translations = {
 
     // Keyboard Shortcuts
     keyboardShortcuts: "Atalhos de Teclado",
-    shortcutNext: "Avançar para o próximo passo",
-    shortcutPrev: "Voltar ao passo anterior",
-    shortcutFocusFirst: "Focar primeiro campo obrigatório",
-    shortcutSubmit: "Enviar formulário (último passo)",
+    shortcutNext: "Continuar/Enviar",
+    shortcutPrev: "Voltar",
+    shortcutTab: "Percorrer campos",
   },
   es: {
     // Generic/Header/Sidebar
@@ -188,9 +186,8 @@ export const translations = {
     
     // Keyboard Shortcuts
     keyboardShortcuts: "Atajos de Teclado",
-    shortcutNext: "Avanzar al siguiente paso",
-    shortcutPrev: "Volver al paso anterior",
-    shortcutFocusFirst: "Enfocar el primer campo obligatorio",
-    shortcutSubmit: "Enviar formulario (último paso)",
+    shortcutNext: "Continuar/Enviar",
+    shortcutPrev: "Atrás",
+    shortcutTab: "Recorrer campos",
   },
 }
