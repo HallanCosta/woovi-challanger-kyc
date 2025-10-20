@@ -76,22 +76,18 @@ export function KeyboardShortcuts() {
             </button>
           </div>
 
-          <div className="space-y-1 text-xs">
+          <div className="space-y-2 text-xs">
             <div className="flex items-center justify-between">
               <span>{t("shortcutNext")}</span>
-              <KeyCombo keys={["Alt", "Shift", ">"]} />
+              <KeyCombo keys={["Ctrl", "Shift", "Enter"]} />
             </div>
             <div className="flex items-center justify-between">
               <span>{t("shortcutPrev")}</span>
-              <KeyCombo keys={["Alt", "Shift", "<"]} />
+              <KeyCombo keys={["Ctrl", "Shift", "Backspace"]} />
             </div>
             <div className="flex items-center justify-between">
-              <span>{t("shortcutFocusFirst")}</span>
-              <KeyCombo keys={["Alt", "F"]} />
-            </div>
-            <div className="flex items-center justify-between">
-              <span>{t("shortcutSubmit")}</span>
-              <KeyCombo keys={["Alt", "S"]} />
+              <span>{t("shortcutTab")}</span>
+              <KeyCombo keys={["Tab"]} />
             </div>
           </div>
           </motion.div>

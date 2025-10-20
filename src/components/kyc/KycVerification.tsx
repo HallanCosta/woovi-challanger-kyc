@@ -27,7 +27,7 @@ export function KycVerification() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const firstFieldRef = useRef<HTMLInputElement>(null)
 
-  const { toasts, toast, dismiss } = useToast()
+  const { toasts, dismiss } = useToast()
   const { t } = useTranslation()
 
   const totalSteps = 5
@@ -82,26 +82,18 @@ export function KycVerification() {
         return
       }
 
-      if (!event.altKey) return
+      if (!(event.ctrlKey && event.shiftKey)) return
 
-      const shortcuts: Record<string, () => void> = {
-        '>': () => !isLastStep && handleNext(),
-        '<': () => !isFirstStep && prevStep(),
-        'f': () => firstFieldRef.current?.focus(),
-        'F': () => firstFieldRef.current?.focus(),
-        's': handleSubmitShortcut,
-        'S': handleSubmitShortcut
-      }
-
-      const codeShortcuts: Record<string, () => void> = {
-        'Period': () => !isLastStep && handleNext(), 
-        'Comma': () => !isFirstStep && prevStep(),
-      }
-
-      const action = shortcuts[event.key] || codeShortcuts[event.code]
-      if (action) {
+      if (event.key === 'Enter' || event.code === 'NumpadEnter') {
         event.preventDefault()
-        action()
+        if (!isLastStep) handleNext()
+        return
+      }
+
+      if (event.key === 'Backspace') {
+        event.preventDefault()
+        if (!isFirstStep) prevStep()
+        return
       }
     }
 
@@ -109,18 +101,7 @@ export function KycVerification() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [currentStep, isFirstStep, isLastStep])
 
-  function handleSubmitShortcut() {
-    if (isLastStep) {
-      handleSubmit()
-      return
-    }
-
-    toast({
-      title: t("submit"),
-      description: t("reviewInformation"), 
-      variant: "destructive"
-    })
-  }
+  
 
   if (isSubmitted) {
     return (
