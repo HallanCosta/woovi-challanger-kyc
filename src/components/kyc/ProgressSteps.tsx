@@ -24,7 +24,6 @@ export function ProgressSteps({ steps, currentStep, onStepClick }: ProgressSteps
           const isCurrent = step.number === currentStep
           const isClickable = onStepClick && step.number < currentStep
 
-          // O conector antes do nó usa o estado do passo anterior
           const prevCompleted = index > 0 ? steps[index - 1].number < currentStep : false
 
           return (
