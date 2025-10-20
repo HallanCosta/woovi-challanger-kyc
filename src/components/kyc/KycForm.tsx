@@ -9,11 +9,13 @@ import { ProgressSteps } from "@/components/kyc/ProgressSteps"
 import { PersonalInfoStep } from "@/components/kyc/PersonalInfoStep"
 import { Toast, ToastContainer } from "@/components/ui/Toast"
 
-import { useKYCForm } from "@/hooks/useKycForm"
+import { useKYCForm } from "@/components/kyc/hooks/useKycForm"
 import { useToast } from "@/hooks/useToast"
 import { useTranslation } from "@/lib/i18n/useTranslation"
+import { useMultiStepForm } from "@/hooks/useMultiStepForm"
+import { steps as stepsIds } from "@/components/kyc/constants/steps"
 
-export function KycVerification() {
+export function KycForm() {
   const {
     formData,
     updatePersonalInfo,
@@ -22,40 +24,22 @@ export function KycVerification() {
     onSubmit
   } = useKYCForm()
 
-  const [currentStep, setCurrentStep] = useState(1)
+  const totalSteps = stepsIds.length
+  const {
+    currentStep,
+    nextStep,
+    prevStep,
+    goToStep,
+    isFirstStep,
+    isLastStep,
+  } = useMultiStepForm(totalSteps)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const firstFieldRef = useRef<HTMLInputElement>(null)
 
   const { toasts, dismiss } = useToast()
   const { t } = useTranslation()
-
-  const totalSteps = 5
-  const isFirstStep = currentStep === 1
-  const isLastStep = currentStep === totalSteps
-  const steps = [
-    { number: 1, label: t("personalInfo") },
-    { number: 2, label: t("address") },
-    { number: 3, label: t("identity") },
-    { number: 4, label: t("selfie") },
-    { number: 5, label: t("review") },
-  ]
-
-  const nextStep = () => {
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1)
-    }
-  }
-
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
-    }
-  }
-
-  const goToStep = (step: number) => {
-    setCurrentStep(step)
-  }
+  const steps = stepsIds.map((id, index) => ({ number: index + 1, label: t(id) }))
 
   const handleNext = async () => {
     const isValid = await validateStep(currentStep)
@@ -67,11 +51,8 @@ export function KycVerification() {
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault()
     setIsSubmitting(true)
-    
     onSubmit()
-
     await new Promise((resolve) => setTimeout(resolve, 2000))
-
     setIsSubmitting(false)
     setIsSubmitted(true)
   }
@@ -100,8 +81,6 @@ export function KycVerification() {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [currentStep, isFirstStep, isLastStep])
-
-  
 
   if (isSubmitted) {
     return (
@@ -161,7 +140,7 @@ export function KycVerification() {
               <ProgressSteps steps={steps} currentStep={currentStep} onStepClick={goToStep} />
             </motion.div>
 
-            <form onSubmit={onSubmit}>
+            <form onSubmit={handleSubmit}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -249,3 +228,5 @@ export function KycVerification() {
     </div>
   )
 }
+
+
