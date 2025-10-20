@@ -5,7 +5,7 @@ import { CheckCircle2, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { Header } from "@/components/kyc/Header"
 import { Sidebar } from "@/components/ui/Sidebar"
-import { ProgressSteps } from "@/components/ui/ProgressSteps"
+import { ProgressSteps } from "@/components/kyc/ProgressSteps"
 import { PersonalInfoStep } from "@/components/kyc/PersonalInfoStep"
 import { Toast, ToastContainer } from "@/components/ui/Toast"
 
