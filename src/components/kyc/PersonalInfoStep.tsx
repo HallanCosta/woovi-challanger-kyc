@@ -7,7 +7,7 @@ import { KeyboardShortcuts } from "@/components/kyc/KeyboardShortcuts"
 
 import { COUNTRIES } from "@/constants/countries"
 
-import type { KYCFormData, PersonalInfo } from "@/lib/validation"
+import type { KYCFormData, PersonalInfo } from "@/components/kyc/validation"
 
 import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils"
 import { useTranslation } from "@/lib/i18n/useTranslation"

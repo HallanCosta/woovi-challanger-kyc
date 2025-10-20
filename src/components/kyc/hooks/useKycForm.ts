@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form"
 import type { FieldPath } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import type { KYCFormData } from "@/lib/types"
+import type { KYCFormData } from "@/components/kyc/types"
 import { 
   kycFormDataSchema,
   type PersonalInfo,
-} from "@/lib/validation"
+} from "@/components/kyc/validation"
 import { steps as stepsIds, type StepId } from "@/components/kyc/constants/steps"
 
 const initialFormData: KYCFormData = {
