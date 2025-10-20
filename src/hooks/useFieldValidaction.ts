@@ -1,6 +1,6 @@
 
 import { useState, useCallback, useEffect, useRef } from "react"
-import type { ValidationErrors } from "@/lib/types"
+import type { ValidationErrors } from "@/components/kyc/types"
 
 type ValidationFunction = (fieldName: string, value: any, allData?: any) => string | null
 
