@@ -1,33 +1,27 @@
 import { z } from 'zod'
+import {
+  validateCPF,
+  validateFullName,
+  validateMinAge,
+  validatePhoneByCountry,
+  validateFileSize,
+  validateFileType,
+  validateFileRequired,
+  validateIdTypeSelected,
+  validateIdBackRequired,
+  validateTermsAccepted,
+  FILE_TYPES,
+} from '@/lib/utils/validators'
 
 const emailSchema = z.string().email('validation.email.invalid')
 
 const fullNameSchema = z.string()
   .min(1, 'validation.fullName.required')
-  .refine((name) => {
-    const trimmedName = name.trim()
-    if (trimmedName.length < 3) return false
-    
-    const nameParts = trimmedName.split(/\s+/).filter(part => part.length > 0)
-    if (nameParts.length < 2) return false
-    
-    return nameParts.every(part => part.length >= 2)
-  }, 'validation.fullName.format')
+  .refine((name) => validateFullName(name), 'validation.fullName.format')
 
 const dateOfBirthSchema = z.string()
   .min(1, 'validation.dateOfBirth.required')
-  .refine((date) => {
-    const today = new Date()
-    const birthDate = new Date(date)
-    let age = today.getFullYear() - birthDate.getFullYear()
-    const monthDiff = today.getMonth() - birthDate.getMonth()
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--
-    }
-
-    return age >= 18
-  }, 'validation.dateOfBirth.minAge')
+  .refine((date) => validateMinAge(date, 18), 'validation.dateOfBirth.minAge')
 
 export const personalInfoSchema = z.object({
   fullName: fullNameSchema,
@@ -35,33 +29,7 @@ export const personalInfoSchema = z.object({
   phone: z.string().min(1, 'validation.phone.required'),
   dateOfBirth: dateOfBirthSchema,
   country: z.string().min(1, 'validation.country.required')
-}).refine((data) => {
-  const cleanPhone = data.phone.replace(/[\s\-+()]/g, '')
-
-  if (!/^\d+$/.test(cleanPhone)) {
-    return false
-  }
-
-  const countryPhoneLengths: Record<string, number[]> = {
-    Brazil: [10, 11],
-    "United States": [10],
-    Canada: [10], 
-    "United Kingdom": [10, 11],
-    Spain: [9],
-    Portugal: [9],
-    Germany: [10, 11],
-    France: [10],
-    Italy: [10],
-    Australia: [10]
-  }
-
-  if (data.country in countryPhoneLengths) {
-    const validLengths = countryPhoneLengths[data.country]
-    return validLengths.includes(cleanPhone.length)
-  }
-
-  return cleanPhone.length >= 8
-}, {
+}).refine((data) => validatePhoneByCountry(data.phone, data.country), {
   message: 'validation.phone.invalid',
   path: ['phone']
 })
@@ -71,18 +39,44 @@ export const addressInfoSchema = z.object({
   city: z.string().min(1, 'validation.address.city.required'),
   state: z.string().min(1, 'validation.address.state.required'),
   postalCode: z.string().min(1, 'validation.address.postalCode.required'),
-  addressProof: z.instanceof(File).nullable()
+  addressProof: z.instanceof(File)
+    .nullable()
+    .refine((file) => validateFileRequired(file), 'validation.address.addressProof.required')
+    .refine((file) => validateFileSize(file, 5), 'validation.address.addressProof.maxSize')
+    .refine((file) => validateFileType(file, FILE_TYPES.DOCUMENTS), 'validation.address.addressProof.type')
 })
 
 export const identityInfoSchema = z.object({
-  idType: z.enum(['passport', 'drivers-license', 'rg', '']).refine((val) => val !== '', 'validation.identity.idType.required'),
-  idNumber: z.string().min(1, 'validation.identity.idNumber.required'),
-  idFront: z.instanceof(File).nullable(),
-  idBack: z.instanceof(File).nullable()
-})
+  idType: z.enum(['passport', 'drivers-license', 'rg', '']).refine(
+    (val) => validateIdTypeSelected(val), 
+    'validation.identity.idType.required'
+  ),
+  idNumber: z.string()
+    .min(1, 'validation.identity.idNumber.required')
+    .refine((cpf) => validateCPF(cpf), 'validation.identity.idNumber.invalid'),
+  idFront: z.instanceof(File)
+    .nullable()
+    .refine((file) => validateFileRequired(file), 'validation.identity.idFront.required')
+    .refine((file) => validateFileSize(file, 5), 'validation.identity.idFront.maxSize')
+    .refine((file) => validateFileType(file, FILE_TYPES.IMAGES), 'validation.identity.idFront.type'),
+  idBack: z.instanceof(File)
+    .nullable()
+    .refine((file) => validateFileSize(file, 5), 'validation.identity.idBack.maxSize')
+    .refine((file) => validateFileType(file, FILE_TYPES.IMAGES), 'validation.identity.idBack.type')
+}).refine(
+  (data) => validateIdBackRequired(data.idType, data.idBack),
+  {
+    message: 'validation.identity.idBack.required',
+    path: ['idBack']
+  }
+)
 
 export const selfieInfoSchema = z.object({
-  selfie: z.instanceof(File).nullable()
+  selfie: z.instanceof(File)
+    .nullable()
+    .refine((file) => validateFileRequired(file), 'validation.selfie.required')
+    .refine((file) => validateFileSize(file, 5), 'validation.selfie.maxSize')
+    .refine((file) => validateFileType(file, FILE_TYPES.IMAGES), 'validation.selfie.type')
 })
 
 export const kycFormDataSchema = z.object({
@@ -90,7 +84,7 @@ export const kycFormDataSchema = z.object({
   addressInfo: addressInfoSchema,
   identityInfo: identityInfoSchema,
   selfieInfo: selfieInfoSchema,
-  termsAccepted: z.boolean().refine((val) => val === true, 'validation.terms.accept')
+  termsAccepted: z.boolean().refine((val) => validateTermsAccepted(val), 'validation.terms.accept')
 })
 
 export type PersonalInfo = z.infer<typeof personalInfoSchema>
@@ -131,3 +125,4 @@ export function getValidationErrors(result: { success: boolean; error?: { issues
   
   return errors
 }
+

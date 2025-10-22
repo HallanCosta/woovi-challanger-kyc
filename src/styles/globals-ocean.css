@@ -11,16 +11,17 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.12 0.02 220);
 
-  /* Primary color - Ocean Blue */
-  --primary: oklch(0.45 0.15 220);
+  /* Primary color - Ocean Blue, adjusted for contrast */
+  --primary: oklch(0.42 0.15 220);
   --primary-foreground: oklch(0.98 0.01 200);
 
   --secondary: oklch(0.92 0.05 160);
   --secondary-foreground: oklch(0.15 0.02 220);
   --muted: oklch(0.92 0.05 160);
-  --muted-foreground: oklch(0.45 0.02 220);
+  /* Darken muted-foreground for better contrast */
+  --muted-foreground: oklch(0.38 0.02 220);
   --accent: oklch(0.92 0.05 160);
-  --accent-foreground: oklch(0.15 0.02 220);
+  --accent-foreground: oklch(0.12 0.02 220);
 
   /* Semantic colors for validation states - Ocean theme */
   --success: oklch(0.55 0.12 140);
@@ -36,7 +37,7 @@
   --destructive-foreground: oklch(0.98 0.01 200);
   --border: oklch(0.88 0.02 200);
   --input: oklch(0.88 0.02 200);
-  --ring: oklch(0.45 0.15 220);
+  --ring: oklch(0.42 0.15 220);
   --chart-1: oklch(0.45 0.15 220);
   --chart-2: oklch(0.55 0.12 140);
   --chart-3: oklch(0.65 0.15 60);
@@ -63,13 +64,14 @@
   --card-foreground: oklch(0.92 0.05 160);
   --popover: oklch(0.12 0.02 220);
   --popover-foreground: oklch(0.92 0.05 160);
-  --primary: oklch(0.55 0.15 220);
+  /* Brighter primary in dark mode for contrast with light text */
+  --primary: oklch(0.62 0.15 220);
   --primary-foreground: oklch(0.08 0.02 220);
   /* Lighter secondary and muted colors for better form field visibility */
   --secondary: oklch(0.18 0.05 220);
   --secondary-foreground: oklch(0.92 0.05 160);
   --muted: oklch(0.18 0.05 220);
-  --muted-foreground: oklch(0.65 0.02 220);
+  --muted-foreground: oklch(0.75 0.02 220);
   --accent: oklch(0.18 0.05 220);
   --accent-foreground: oklch(0.92 0.05 160);
   --success: oklch(0.45 0.12 140);
@@ -83,8 +85,8 @@
   --destructive: oklch(0.45 0.18 20);
   --destructive-foreground: oklch(0.92 0.05 160);
   /* Lighter border and input colors for better form visibility */
-  --border: oklch(0.25 0.05 220);
-  --input: oklch(0.25 0.05 220);
+  --border: oklch(0.28 0.05 220);
+  --input: oklch(0.28 0.05 220);
   --ring: oklch(0.55 0.15 220);
   --chart-1: oklch(0.55 0.15 220);
   --chart-2: oklch(0.45 0.12 140);

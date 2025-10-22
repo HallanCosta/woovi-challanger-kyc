@@ -7,7 +7,7 @@ import { KeyboardShortcuts } from "@/components/kyc/KeyboardShortcuts"
 
 import { COUNTRIES } from "@/constants/countries"
 
-import type { KYCFormData, PersonalInfo } from "@/components/kyc/validation"
+import type { KYCFormData, PersonalInfo } from "@/components/kyc/validations/kycSchema"
 
 import { formatPhoneNumber, getPhoneFormat } from "@/lib/utils"
 import { useTranslation } from "@/lib/i18n/useTranslation"
@@ -63,7 +63,7 @@ export function PersonalInfoStep({ data, errors, onChange, firstFieldRef }: Pers
         </FormField>
 
         <FormField label={t("country")} error={errors.personalInfo?.country?.message} required>
-          <Select value={data.country} onValueChange={handleCountryChange}>
+          <Select value={data.country} onValueChange={handleCountryChange} aria-label={t("country")}>
             <SelectTrigger>
               <SelectValue placeholder={t("selectCountry")} />
             </SelectTrigger>
