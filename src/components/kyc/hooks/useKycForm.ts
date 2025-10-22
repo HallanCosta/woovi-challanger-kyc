@@ -3,11 +3,14 @@ import { useForm } from "react-hook-form"
 import type { FieldPath } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import type { KYCFormData } from "@/components/kyc/types"
 import { 
   kycFormDataSchema,
+  type KYCFormData,
   type PersonalInfo,
-} from "@/components/kyc/validation"
+  type AddressInfo,
+  type IdentityInfo,
+  type SelfieInfo,
+} from "@/components/kyc/validations/kycSchema"
 import { steps as stepsIds, type StepId } from "@/components/kyc/constants/steps"
 
 const initialFormData: KYCFormData = {
@@ -89,6 +92,77 @@ export function useKYCForm() {
     [setValue, formData.personalInfo, trigger]
   )
 
+  const updateAddressInfo = useCallback(
+    (data: Partial<AddressInfo>) => {
+      setValue("addressInfo", { ...formData.addressInfo, ...data }, {
+        shouldValidate: false,
+        shouldDirty: true
+      })
+
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current)
+      }
+
+      debounceTimeoutRef.current = setTimeout(() => {
+        const fields = Object.keys(data).map((key) => `addressInfo.${key}` as FieldPath<KYCFormData>)
+        trigger(fields)
+      }, 300)
+    },
+    [setValue, formData.addressInfo, trigger]
+  )
+
+  const updateIdentityInfo = useCallback(
+    (data: Partial<IdentityInfo>) => {
+      setValue("identityInfo", { ...formData.identityInfo, ...data }, {
+        shouldValidate: false,
+        shouldDirty: true
+      })
+
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current)
+      }
+
+      debounceTimeoutRef.current = setTimeout(() => {
+        const fields = Object.keys(data).map((key) => `identityInfo.${key}` as FieldPath<KYCFormData>)
+        trigger(fields)
+      }, 300)
+    },
+    [setValue, formData.identityInfo, trigger]
+  )
+
+  const updateSelfieInfo = useCallback(
+    (data: Partial<SelfieInfo>) => {
+      setValue("selfieInfo", { ...formData.selfieInfo, ...data }, {
+        shouldValidate: false,
+        shouldDirty: true
+      })
+
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current)
+      }
+
+      debounceTimeoutRef.current = setTimeout(() => {
+        const fields = Object.keys(data).map((key) => `selfieInfo.${key}` as FieldPath<KYCFormData>)
+        trigger(fields)
+      }, 300)
+    },
+    [setValue, formData.selfieInfo, trigger]
+  )
+
+  const updateTermsAccepted = useCallback(
+    (accepted: boolean) => {
+      setValue('termsAccepted', accepted, {
+        shouldValidate: true,
+        shouldDirty: true,
+      })
+      debounceTimeoutRef.current && clearTimeout(debounceTimeoutRef.current)
+      debounceTimeoutRef.current = setTimeout(() => {
+        trigger(['termsAccepted'])
+      }, 100)
+    },
+    [setValue, trigger]
+  )
+
   const validateStep = useCallback(
     async (step: number): Promise<boolean> => {
       const stepId = stepsIds[step - 1]
@@ -131,6 +205,10 @@ export function useKYCForm() {
     formData,
     
     updatePersonalInfo,
+    updateAddressInfo,
+    updateIdentityInfo,
+    updateSelfieInfo,
+    updateTermsAccepted,
     
     validateStep,
     resetForm,

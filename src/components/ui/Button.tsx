@@ -48,6 +48,7 @@ function Button({
   return (
     <Comp
       data-slot="button"
+      aria-label={(props as any)['aria-label']}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />

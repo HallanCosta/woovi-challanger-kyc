@@ -12,15 +12,17 @@
   --popover-foreground: oklch(0.145 0 0);
 
   /* Updated primary color to purple for ApexMarkets brand */
-  --primary: oklch(0.55 0.22 280);
+  /* Slightly darker primary to ensure 4.5:1 on light foreground */
+  --primary: oklch(0.52 0.22 280);
   --primary-foreground: oklch(0.985 0 0);
 
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  /* Darken muted-foreground for better contrast on light bg */
+  --muted-foreground: oklch(0.45 0 0);
   --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent-foreground: oklch(0.18 0 0);
 
   /* Added semantic colors for validation states */
   --success: oklch(0.65 0.18 145);
@@ -36,7 +38,7 @@
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.55 0.22 280);
+  --ring: oklch(0.52 0.22 280);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -63,13 +65,15 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.22 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.65 0.22 280);
+  /* Slightly brighter primary for dark mode contrast with white text */
+  --primary: oklch(0.7 0.22 280);
   --primary-foreground: oklch(0.985 0 0);
   /* Lighter secondary and muted colors for better form field visibility */
   --secondary: oklch(0.32 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.32 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  /* Increase contrast on dark */
+  --muted-foreground: oklch(0.78 0 0);
   --accent: oklch(0.32 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --success: oklch(0.55 0.18 145);
@@ -83,8 +87,8 @@
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
   /* Lighter border and input colors for better form visibility */
-  --border: oklch(0.35 0 0);
-  --input: oklch(0.35 0 0);
+  --border: oklch(0.38 0 0);
+  --input: oklch(0.38 0 0);
   --ring: oklch(0.439 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);

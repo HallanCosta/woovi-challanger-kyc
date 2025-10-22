@@ -6,10 +6,30 @@ import { CheckIcon, ChevronDownIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
+type A11yContextValue = {
+  ariaLabel?: string
+  ariaLabelledBy?: string
+  ariaDescribedBy?: string
+  ariaRequired?: boolean
+}
+
+const SelectA11yContext = React.createContext<A11yContextValue | undefined>(undefined)
+
 function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
-  return <SelectPrimitive.Root {...props} />
+  const ariaLabel = (props as any)['aria-label'] as string | undefined
+  const ariaLabelledBy = (props as any)['aria-labelledby'] as string | undefined
+  const ariaDescribedBy = (props as any)['aria-describedby'] as string | undefined
+  const ariaRequired = (props as any)['aria-required'] as boolean | undefined
+
+  const { ['aria-label']: _a, ['aria-labelledby']: _b, ['aria-describedby']: _c, ['aria-required']: _d, ...rest } = props as any
+
+  return (
+    <SelectA11yContext.Provider value={{ ariaLabel, ariaLabelledBy, ariaDescribedBy, ariaRequired }}>
+      <SelectPrimitive.Root {...rest} />
+    </SelectA11yContext.Provider>
+  )
 }
 
 function SelectValue({
@@ -23,6 +43,7 @@ function SelectTrigger({
   children,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
+  const a11y = React.useContext(SelectA11yContext)
   return (
     <SelectPrimitive.Trigger
       className={cn(
@@ -33,6 +54,10 @@ function SelectTrigger({
         "disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
+      aria-label={(props as any)['aria-label'] ?? a11y?.ariaLabel}
+      aria-labelledby={(props as any)['aria-labelledby'] ?? a11y?.ariaLabelledBy}
+      aria-describedby={(props as any)['aria-describedby'] ?? a11y?.ariaDescribedBy}
+      aria-required={(props as any)['aria-required'] ?? (a11y?.ariaRequired as any)}
       {...props}
     >
       {children}
@@ -109,6 +134,7 @@ function SelectItem({
 
 export {
   Select,
+  SelectA11yContext,
   SelectContent,
   SelectItem,
   SelectTrigger,

@@ -20,14 +20,37 @@ export const translations = {
       },
       country: { required: "Country is required" },
       address: {
-        street: { required: "Street is required" },
+        street: { required: "Full address is required" },
         city: { required: "City is required" },
         state: { required: "State is required" },
         postalCode: { required: "Postal code is required" },
+        addressProof: {
+          required: "Address proof document is required",
+          maxSize: "File must be at most 5MB",
+          type: "Only PDF, JPG or PNG files are allowed",
+        },
       },
       identity: {
         idType: { required: "Please select an ID type" },
-        idNumber: { required: "ID number is required" },
+        idNumber: { 
+          required: "ID number is required",
+          invalid: "Invalid CPF number",
+        },
+        idFront: {
+          required: "ID front image is required",
+          maxSize: "File must be at most 5MB",
+          type: "Only JPG or PNG images are allowed",
+        },
+        idBack: { 
+          required: "Back side image is required for this ID type",
+          maxSize: "File must be at most 5MB",
+          type: "Only JPG or PNG images are allowed",
+        },
+      },
+      selfie: { 
+        required: "Selfie is required",
+        maxSize: "File must be at most 5MB", 
+        type: "Only JPG or PNG images are allowed" 
       },
       terms: { accept: "You must accept the terms and conditions" },
     },
@@ -66,16 +89,59 @@ export const translations = {
     selectCountry: "Select your country",
     selectCountryFirst: "Please select your country first",
 
+    // Address Step
+    addressVerification: "Address Verification",
+    provideAddressDetails: "Enter your full address and upload a proof of address.",
+    streetAddress: "Full Address",
+    streetAddressPlaceholder: "123 Main St, Apt 4B, Building A",
+    city: "City",
+    cityPlaceholder: "New York",
+    stateProvince: "State/Province",
+    stateProvincePlaceholder: "NY",
+    postalCode: "Postal Code",
+    postalCodePlaceholder: "10001",
+    addressProof: "Proof of Address (PDF, JPG, PNG)",
+    fileConstraintsAddress: "Accepted: PDF, JPG, PNG. Max size: 5MB.",
+
+    // Identity Step
+    identityVerification: "Identity Verification",
+    provideIdentityDetails: "Select your ID type, inform the number and upload documents.",
+    idType: "ID Type",
+    selectIdType: "Select an ID type",
+    passport: "Passport",
+    driversLicense: "Driver's License",
+    rg: "RG",
+    idNumber: "ID Number",
+    idNumberPlaceholder: "000.000.000-00",
+    idFrontUpload: "Upload ID (Front)",
+    idBackUpload: "Upload ID (Back)",
+    fileConstraintsIdentity: "Accepted: JPG, PNG. Max size: 5MB.",
+    idBackNote: "Back side required for RG and Driver's License.",
+
+    // Selfie Step
+    selfieVerification: "Selfie Verification",
+    selfieInstructions: "Capture or upload a selfie. Face clearly visible, good lighting, no hats or sunglasses.",
+    selfieUpload: "Upload Selfie",
+    fileConstraintsSelfie: "Accepted: JPG, PNG. Max size: 5MB.",
+
+    // Review Step
+    reviewAndSubmit: "Review & Submit",
+    reviewSummaryHint: "Review all information. You can edit any step before submitting.",
+    edit: "Edit",
+    termsAndConditions: "Terms and Conditions",
+    acceptTermsLabel: "I have read and accept the",
+    termsLink: "Terms and Conditions",
+    openDocument: "Open document",
+
     // Buttons
     back: "Back",
     continue: "Continue",
-    submit: "Submit Verification",
+    submit: "Submit",
     submitting: "Submitting...",
 
     // Success
     verificationSubmitted: "Verification Submitted!",
     submittedSuccessfully: "Your KYC verification has been submitted successfully. We'll review your information and notify you within 24-48 hours.",
-    submitAnother: "Submit Another Verification",
 
     // Accessibility
     toggleTheme: "Toggle theme",
@@ -92,6 +158,35 @@ export const translations = {
     shortcutNext: "Continue/Submit",
     shortcutPrev: "Back",
     shortcutTab: "Navigate fields",
+
+    // File Upload
+    dropFileHere: "Drop file here",
+    clickOrDragFile: "Click or drag file",
+    selfieReady: "Selfie uploaded successfully",
+
+    // Face Detection
+    faceDetection: {
+      selfieCaptureTitle: "Selfie Capture",
+      selfieCaptureDesc: "We will verify your identity using a live selfie with face detection.",
+      activateCamera: "Activate Camera",
+      activatingCamera: "Activating camera...",
+      acceptedFormats: "Accepted: JPG, PNG. Max size: 5MB.",
+      placeFaceCenter: "Position your face in the center",
+      faceDetected: "Face detected",
+      noFaceDetected: "No face detected",
+      noFaceDescription: "Position your face in the center and try again.",
+      cancel: "Cancel",
+      capturePhoto: "Capture Photo",
+      delete: "Delete",
+      retakePhoto: "Take another photo",
+      selfieCaptured: "Selfie captured successfully",
+      tipsTitle: "Tips for a good selfie:",
+      tipFaceCentered: "Face fully visible and centered",
+      tipGoodLighting: "Good lighting, avoid shadows",
+      tipRemoveAccessories: "Remove sunglasses or hats",
+      tipLookAtCamera: "Look directly at the camera",
+      tipNoPhotosOrVideos: "Do not use photos or videos",
+    },
   },
   pt: {
     // Validation
@@ -112,14 +207,37 @@ export const translations = {
       },
       country: { required: "País é obrigatório" },
       address: {
-        street: { required: "Rua é obrigatória" },
+        street: { required: "Endereço completo é obrigatório" },
         city: { required: "Cidade é obrigatória" },
         state: { required: "Estado é obrigatório" },
         postalCode: { required: "CEP é obrigatório" },
+        addressProof: {
+          required: "Comprovante de endereço é obrigatório",
+          maxSize: "Arquivo deve ter no máximo 5MB",
+          type: "Apenas PDF, JPG ou PNG são permitidos",
+        },
       },
       identity: {
         idType: { required: "Selecione um tipo de documento" },
-        idNumber: { required: "Número do documento é obrigatório" },
+        idNumber: { 
+          required: "Número do documento é obrigatório",
+          invalid: "CPF inválido",
+        },
+        idFront: {
+          required: "Imagem da frente do documento é obrigatória",
+          maxSize: "Arquivo deve ter no máximo 5MB",
+          type: "Apenas imagens JPG ou PNG são permitidas",
+        },
+        idBack: { 
+          required: "Imagem do verso é obrigatória para este tipo de documento",
+          maxSize: "Arquivo deve ter no máximo 5MB",
+          type: "Apenas imagens JPG ou PNG são permitidas",
+        },
+      },
+      selfie: { 
+        required: "Selfie é obrigatória",
+        maxSize: "Arquivo deve ter no máximo 5MB", 
+        type: "Apenas imagens JPG ou PNG são permitidas" 
       },
       terms: { accept: "Você deve aceitar os termos e condições" },
     },
@@ -158,16 +276,59 @@ export const translations = {
     selectCountry: "Selecione seu país",
     selectCountryFirst: "Por favor, selecione seu país primeiro",
 
+    // Address Step
+    addressVerification: "Verificação de Endereço",
+    provideAddressDetails: "Informe seu endereço completo e envie um comprovante.",
+    streetAddress: "Endereço Completo",
+    streetAddressPlaceholder: "Rua Exemplo, 123, Apto 4B, Bloco A",
+    city: "Cidade",
+    cityPlaceholder: "São Paulo",
+    stateProvince: "Estado/Província",
+    stateProvincePlaceholder: "SP",
+    postalCode: "CEP",
+    postalCodePlaceholder: "01234-567",
+    addressProof: "Comprovante de Endereço (PDF, JPG, PNG)",
+    fileConstraintsAddress: "Aceitos: PDF, JPG, PNG. Tamanho máx.: 5MB.",
+
+    // Identity Step
+    identityVerification: "Verificação de Identidade",
+    provideIdentityDetails: "Selecione o tipo de documento, informe o número e envie os arquivos.",
+    idType: "Tipo de Documento",
+    selectIdType: "Selecione o tipo de documento",
+    passport: "Passaporte",
+    driversLicense: "Carteira de Motorista",
+    rg: "RG",
+    idNumber: "Número do Documento",
+    idNumberPlaceholder: "000.000.000-00",
+    idFrontUpload: "Enviar Documento (Frente)",
+    idBackUpload: "Enviar Documento (Verso)",
+    fileConstraintsIdentity: "Aceitos: JPG, PNG. Tamanho máx.: 5MB.",
+    idBackNote: "Verso obrigatório para RG e CNH.",
+
+    // Selfie Step
+    selfieVerification: "Verificação de Selfie",
+    selfieInstructions: "Capture ou envie uma selfie. Rosto visível, boa iluminação, sem bonés ou óculos escuros.",
+    selfieUpload: "Enviar Selfie",
+    fileConstraintsSelfie: "Aceitos: JPG, PNG. Tamanho máx.: 5MB.",
+
+    // Review Step
+    reviewAndSubmit: "Revisar e Enviar",
+    reviewSummaryHint: "Revise todas as informações. Você pode editar qualquer etapa antes de enviar.",
+    edit: "Editar",
+    termsAndConditions: "Termos e Condições",
+    acceptTermsLabel: "Li e aceito os",
+    termsLink: "Termos e Condições",
+    openDocument: "Abrir documento",
+
     // Buttons
     back: "Voltar",
     continue: "Continuar",
-    submit: "Enviar Verificação",
+    submit: "Enviar",
     submitting: "Enviando...",
 
     // Success
     verificationSubmitted: "Verificação Enviada!",
     submittedSuccessfully: "Sua verificação KYC foi enviada com sucesso. Revisaremos suas informações e notificaremos você em 24-48 horas.",
-    submitAnother: "Enviar Outra Verificação",
 
     // Accessibility
     toggleTheme: "Alternar tema",
@@ -184,6 +345,35 @@ export const translations = {
     shortcutNext: "Continuar/Enviar",
     shortcutPrev: "Voltar",
     shortcutTab: "Percorrer campos",
+
+    // File Upload
+    dropFileHere: "Solte o arquivo aqui",
+    clickOrDragFile: "Clique ou arraste o arquivo",
+    selfieReady: "Selfie enviada com sucesso",
+
+    // Face Detection
+    faceDetection: {
+      selfieCaptureTitle: "Captura de Selfie",
+      selfieCaptureDesc: "Vamos verificar sua identidade através de uma selfie ao vivo com detecção facial.",
+      activateCamera: "Ativar Câmera",
+      activatingCamera: "Ativando câmera...",
+      acceptedFormats: "Aceitos: JPG, PNG. Tamanho máx.: 5MB.",
+      placeFaceCenter: "Posicione seu rosto no centro",
+      faceDetected: "Rosto detectado",
+      noFaceDetected: "Nenhum rosto detectado",
+      noFaceDescription: "Posicione o rosto no centro e tente novamente.",
+      cancel: "Cancelar",
+      capturePhoto: "Capturar Foto",
+      delete: "Excluir",
+      retakePhoto: "Tirar nova foto",
+      selfieCaptured: "Selfie capturada com sucesso",
+      tipsTitle: "Dicas para uma boa selfie:",
+      tipFaceCentered: "Rosto totalmente visível e centralizado",
+      tipGoodLighting: "Boa iluminação, evite sombras",
+      tipRemoveAccessories: "Remova óculos escuros ou bonés",
+      tipLookAtCamera: "Olhe diretamente para a câmera",
+      tipNoPhotosOrVideos: "Não use fotos ou vídeos",
+    },
   },
   es: {
     // Validation
@@ -204,14 +394,37 @@ export const translations = {
       },
       country: { required: "El país es obligatorio" },
       address: {
-        street: { required: "La calle es obligatoria" },
+        street: { required: "La dirección completa es obligatoria" },
         city: { required: "La ciudad es obligatoria" },
         state: { required: "El estado es obligatorio" },
         postalCode: { required: "El código postal es obligatorio" },
+        addressProof: {
+          required: "El comprobante de domicilio es obligatorio",
+          maxSize: "El archivo debe tener un máximo de 5MB",
+          type: "Solo se permiten archivos PDF, JPG o PNG",
+        },
       },
       identity: {
         idType: { required: "Seleccione un tipo de documento" },
-        idNumber: { required: "El número de documento es obligatorio" },
+        idNumber: { 
+          required: "El número de documento es obligatorio",
+          invalid: "CPF inválido",
+        },
+        idFront: {
+          required: "La imagen frontal del documento es obligatoria",
+          maxSize: "El archivo debe tener un máximo de 5MB",
+          type: "Solo se permiten imágenes JPG o PNG",
+        },
+        idBack: { 
+          required: "La imagen trasera es obligatoria para este tipo de documento",
+          maxSize: "El archivo debe tener un máximo de 5MB",
+          type: "Solo se permiten imágenes JPG o PNG",
+        },
+      },
+      selfie: { 
+        required: "La selfie es obligatoria",
+        maxSize: "El archivo debe tener un máximo de 5MB", 
+        type: "Solo se permiten imágenes JPG o PNG" 
       },
       terms: { accept: "Debe aceptar los términos y condiciones" },
     },
@@ -250,16 +463,59 @@ export const translations = {
     selectCountry: "Selecciona tu país",
     selectCountryFirst: "Por favor, selecciona tu país primero",
 
+    // Address Step
+    addressVerification: "Verificación de Dirección",
+    provideAddressDetails: "Ingresa tu dirección completa y sube un comprobante de domicilio.",
+    streetAddress: "Dirección Completa",
+    streetAddressPlaceholder: "Calle Ejemplo, 123, Apto 4B, Edificio A",
+    city: "Ciudad",
+    cityPlaceholder: "Madrid",
+    stateProvince: "Estado/Provincia",
+    stateProvincePlaceholder: "Madrid",
+    postalCode: "Código Postal",
+    postalCodePlaceholder: "28001",
+    addressProof: "Comprobante de Domicilio (PDF, JPG, PNG)",
+    fileConstraintsAddress: "Aceptados: PDF, JPG, PNG. Tamaño máx.: 5MB.",
+
+    // Identity Step
+    identityVerification: "Verificación de Identidad",
+    provideIdentityDetails: "Selecciona el tipo de documento, ingresa el número y sube los archivos.",
+    idType: "Tipo de Documento",
+    selectIdType: "Selecciona el tipo de documento",
+    passport: "Pasaporte",
+    driversLicense: "Licencia de Conducir",
+    rg: "RG",
+    idNumber: "Número de Documento",
+    idNumberPlaceholder: "000.000.000-00",
+    idFrontUpload: "Subir Documento (Frente)",
+    idBackUpload: "Subir Documento (Reverso)",
+    fileConstraintsIdentity: "Aceptados: JPG, PNG. Tamaño máx.: 5MB.",
+    idBackNote: "Reverso obligatorio para RG y Licencia de Conducir.",
+
+    // Selfie Step
+    selfieVerification: "Verificación de Selfie",
+    selfieInstructions: "Captura o sube una selfie. Rostro visible, buena iluminación, sin gorras ni lentes oscuros.",
+    selfieUpload: "Subir Selfie",
+    fileConstraintsSelfie: "Aceptados: JPG, PNG. Tamaño máx.: 5MB.",
+
+    // Review Step
+    reviewAndSubmit: "Revisar y Enviar",
+    reviewSummaryHint: "Revisa toda la información. Puedes editar cualquier etapa antes de enviar.",
+    edit: "Editar",
+    termsAndConditions: "Términos y Condiciones",
+    acceptTermsLabel: "He leído y acepto los",
+    termsLink: "Términos y Condiciones",
+    openDocument: "Abrir documento",
+
     // Buttons
     back: "Atrás",
     continue: "Continuar",
-    submit: "Enviar Verificación",
+    submit: "Enviar",
     submitting: "Enviando...",
 
     // Success
     verificationSubmitted: "¡Verificación Enviada!",
     submittedSuccessfully: "Tu verificación KYC ha sido enviada con éxito. Revisaremos tu información y te notificaremos en 24-48 horas.",
-    submitAnother: "Enviar Otra Verificación",
 
     // Accessibility
     toggleTheme: "Cambiar tema",
@@ -276,5 +532,34 @@ export const translations = {
     shortcutNext: "Continuar/Enviar",
     shortcutPrev: "Atrás",
     shortcutTab: "Recorrer campos",
+
+    // File Upload
+    dropFileHere: "Suelta el archivo aquí",
+    clickOrDragFile: "Haz clic o arrastra el archivo",
+    selfieReady: "Selfie subida exitosamente",
+
+    // Face Detection
+    faceDetection: {
+      selfieCaptureTitle: "Captura de Selfie",
+      selfieCaptureDesc: "Verificaremos tu identidad con una selfie en vivo con detección facial.",
+      activateCamera: "Activar Cámara",
+      activatingCamera: "Activando cámara...",
+      acceptedFormats: "Aceptados: JPG, PNG. Tamaño máx.: 5MB.",
+      placeFaceCenter: "Coloca tu rostro en el centro",
+      faceDetected: "Rostro detectado",
+      noFaceDetected: "Ningún rostro detectado",
+      noFaceDescription: "Coloca tu rostro en el centro e inténtalo de nuevo.",
+      cancel: "Cancelar",
+      capturePhoto: "Tomar Foto",
+      delete: "Eliminar",
+      retakePhoto: "Tomar otra foto",
+      selfieCaptured: "Selfie capturada con éxito",
+      tipsTitle: "Consejos para una buena selfie:",
+      tipFaceCentered: "Rostro totalmente visible y centrado",
+      tipGoodLighting: "Buena iluminación, evita sombras",
+      tipRemoveAccessories: "Quita gafas de sol o gorras",
+      tipLookAtCamera: "Mira directamente a la cámara",
+      tipNoPhotosOrVideos: "No uses fotos o videos",
+    },
   },
 }

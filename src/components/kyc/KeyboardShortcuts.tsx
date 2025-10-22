@@ -79,11 +79,11 @@ export function KeyboardShortcuts() {
           <div className="space-y-2 text-xs">
             <div className="flex items-center justify-between">
               <span>{t("shortcutNext")}</span>
-              <KeyCombo keys={["Ctrl", "Shift", "Enter"]} />
+              <KeyCombo keys={["Ctrl", "Enter"]} />
             </div>
             <div className="flex items-center justify-between">
               <span>{t("shortcutPrev")}</span>
-              <KeyCombo keys={["Ctrl", "Shift", "Backspace"]} />
+              <KeyCombo keys={["Ctrl", "Backspace"]} />
             </div>
             <div className="flex items-center justify-between">
               <span>{t("shortcutTab")}</span>

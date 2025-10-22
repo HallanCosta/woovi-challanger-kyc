@@ -12,19 +12,21 @@ interface Step {
 interface ProgressStepsProps {
   steps: Step[]
   currentStep: number
+  validatedSteps?: number[]
+  maxReachedStep?: number
   onStepClick?: (step: number) => void
 }
 
-export function ProgressSteps({ steps, currentStep, onStepClick }: ProgressStepsProps) {
+export function ProgressSteps({ steps, currentStep, validatedSteps = [], maxReachedStep = 1, onStepClick }: ProgressStepsProps) {
   return (
     <div className="w-full">
       <div className="flex items-center w-full">
         {steps.map((step, index) => {
-          const isCompleted = step.number < currentStep
+          const isCompleted = validatedSteps.includes(step.number)
           const isCurrent = step.number === currentStep
-          const isClickable = onStepClick && step.number < currentStep
+          const isClickable = onStepClick && step.number <= maxReachedStep && step.number !== currentStep
 
-          const prevCompleted = index > 0 ? steps[index - 1].number < currentStep : false
+          const prevCompleted = index > 0 ? validatedSteps.includes(steps[index - 1].number) : false
 
           return (
             <Fragment key={step.number}>

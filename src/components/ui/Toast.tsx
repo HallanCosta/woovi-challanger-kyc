@@ -45,6 +45,7 @@ export function Toast({ id, title, description, variant = 'default', onDismiss }
           'text-foreground/50 hover:text-foreground',
           variant === 'destructive' && 'text-white/70 hover:text-white focus:ring-white/50'
         )}
+        aria-label="Dismiss notification"
       >
         <X className="h-4 w-4" />
       </button>
@@ -54,8 +55,15 @@ export function Toast({ id, title, description, variant = 'default', onDismiss }
 
 export function ToastContainer({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-2 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col sm:p-4 md:max-w-[320px]">
-      <div className="space-y-2">
+    <div
+      className={
+        // Sempre no topo à direita (mobile e desktop), respeitando safe-area
+        'fixed top-0 right-0 z-[100] flex max-h-screen w-full sm:w-auto flex-col p-2 '
+        + 'pt-[calc(env(safe-area-inset-top)+0.5rem)] pr-[calc(env(safe-area-inset-right,0)+0.5rem)] '
+        + 'sm:p-4'
+      }
+    >
+      <div className="space-y-2 ml-auto w-full max-w-[92vw] sm:max-w-[360px]">
         {children}
       </div>
     </div>

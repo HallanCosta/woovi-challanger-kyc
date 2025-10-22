@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { CheckCircle2, Loader2 } from "lucide-react"
 
@@ -7,6 +7,10 @@ import { Header } from "@/components/kyc/Header"
 import { Sidebar } from "@/components/ui/Sidebar"
 import { ProgressSteps } from "@/components/kyc/ProgressSteps"
 import { PersonalInfoStep } from "@/components/kyc/PersonalInfoStep"
+import { AddressStep } from "@/components/kyc/AddressStep"
+import { IdentityStep } from "@/components/kyc/IdentityStep"
+import { SelfieStep } from "@/components/kyc/SelfieStep"
+import { ReviewStep } from "@/components/kyc/ReviewStep"
 import { Toast, ToastContainer } from "@/components/ui/Toast"
 
 import { useKYCForm } from "@/components/kyc/hooks/useKycForm"
@@ -19,6 +23,10 @@ export function KycForm() {
   const {
     formData,
     updatePersonalInfo,
+    updateAddressInfo,
+    updateIdentityInfo,
+    updateSelfieInfo,
+    updateTermsAccepted,
     validateStep,
     errors,
     onSubmit
@@ -35,21 +43,61 @@ export function KycForm() {
   } = useMultiStepForm(totalSteps)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [validatedSteps, setValidatedSteps] = useState<number[]>([])
+  const [maxReachedStep, setMaxReachedStep] = useState(1)
   const firstFieldRef = useRef<HTMLInputElement>(null)
 
   const { toasts, dismiss } = useToast()
   const { t } = useTranslation()
   const steps = stepsIds.map((id, index) => ({ number: index + 1, label: t(id) }))
 
-  const handleNext = async () => {
+  const handleNext = useCallback(async () => {
     const isValid = await validateStep(currentStep)
     if (isValid) {
+      setValidatedSteps((prev) => {
+        if (!prev.includes(currentStep)) {
+          return [...prev, currentStep]
+        }
+        return prev
+      })
+      const nextStepNumber = currentStep + 1
+      setMaxReachedStep((prev) => Math.max(prev, nextStepNumber))
       nextStep()
     }
-  }
+  }, [currentStep, validateStep, nextStep])
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault()
+  const handleStepClick = useCallback(async (step: number) => {
+    if (step < currentStep) {
+      goToStep(step)
+      return
+    }
+    
+    if (step > currentStep && step <= maxReachedStep) {
+      const isValid = await validateStep(currentStep)
+      if (isValid) {
+        setValidatedSteps((prev) => {
+          if (!prev.includes(currentStep)) {
+            return [...prev, currentStep]
+          }
+          return prev
+        })
+        goToStep(step)
+      }
+    }
+  }, [currentStep, maxReachedStep, validateStep, goToStep])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!isLastStep) {
+      return
+    }
+    
+    const isValid = await validateStep(currentStep)
+    if (!isValid) {
+      return
+    }
+    
     setIsSubmitting(true)
     onSubmit()
     await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -57,30 +105,53 @@ export function KycForm() {
     setIsSubmitted(true)
   }
 
+  const handleSubmitShortcut = useCallback(async () => {
+    if (!isLastStep || isSubmitting) return
+    
+    const isValid = await validateStep(currentStep)
+    if (!isValid) return
+    
+    setIsSubmitting(true)
+    onSubmit()
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    setIsSubmitting(false)
+    setIsSubmitted(true)
+  }, [isLastStep, isSubmitting, currentStep, validateStep, onSubmit])
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLElement && event.target.matches('input, textarea, select')) {
+      const isInInput = event.target instanceof HTMLElement && 
+                       event.target.matches('input, textarea, select')
+
+      if (event.ctrlKey && !event.shiftKey && !event.altKey && event.key === 'Enter') {
+        event.preventDefault()
+        event.stopPropagation()
+        if (!isLastStep) {
+          handleNext()
+        } else {
+          handleSubmitShortcut()
+        }
         return
       }
 
-      if (!(event.ctrlKey && event.shiftKey)) return
-
-      if (event.key === 'Enter' || event.code === 'NumpadEnter') {
+      if (event.ctrlKey && !event.shiftKey && !event.altKey && event.key === 'Backspace') {
         event.preventDefault()
-        if (!isLastStep) handleNext()
+        event.stopPropagation()
+        if (!isFirstStep) {
+          prevStep()
+        }
         return
       }
 
-      if (event.key === 'Backspace') {
+      if (event.key === 'Enter' && !event.ctrlKey && !isLastStep && isInInput) {
         event.preventDefault()
-        if (!isFirstStep) prevStep()
         return
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [currentStep, isFirstStep, isLastStep])
+    document.addEventListener('keydown', handleKeyDown, { capture: true })
+    return () => document.removeEventListener('keydown', handleKeyDown, { capture: true })
+  }, [currentStep, isFirstStep, isLastStep, handleNext, prevStep, handleSubmitShortcut])
 
   if (isSubmitted) {
     return (
@@ -107,15 +178,6 @@ export function KycForm() {
               </motion.div>
               <h2 className="mb-3 text-2xl font-bold">{t("verificationSubmitted")}</h2>
               <p className="mb-6 text-muted-foreground">{t("submittedSuccessfully")}</p>
-              <Button
-                onClick={() => {
-                  setIsSubmitted(false)
-                  goToStep(1)
-                }}
-                variant="outline"
-              >
-                {t("submitAnother")}
-              </Button>
             </div>
           </motion.div>
         </main>
@@ -137,7 +199,13 @@ export function KycForm() {
               transition={{ duration: 0.3 }}
               className="mb-6 rounded-lg bg-card p-4 shadow-sm md:mb-8 md:p-6"
             >
-              <ProgressSteps steps={steps} currentStep={currentStep} onStepClick={goToStep} />
+              <ProgressSteps 
+                steps={steps} 
+                currentStep={currentStep} 
+                validatedSteps={validatedSteps}
+                maxReachedStep={maxReachedStep}
+                onStepClick={handleStepClick} 
+              />
             </motion.div>
 
             <form onSubmit={handleSubmit}>
@@ -161,6 +229,39 @@ export function KycForm() {
                         onChange={updatePersonalInfo}
                         errors={errors}
                         firstFieldRef={firstFieldRef}
+                      />
+                    )}
+                    {currentStep === 2 && (
+                      <AddressStep
+                        data={formData.addressInfo}
+                        onChange={updateAddressInfo}
+                        errors={errors}
+                        firstFieldRef={firstFieldRef}
+                        country={formData.personalInfo.country}
+                      />
+                    )}
+                    {currentStep === 3 && (
+                      <IdentityStep
+                        data={formData.identityInfo}
+                        onChange={updateIdentityInfo}
+                        errors={errors}
+                        firstFieldRef={firstFieldRef}
+                      />
+                    )}
+                    {currentStep === 4 && (
+                      <SelfieStep
+                        data={formData.selfieInfo}
+                        onChange={updateSelfieInfo}
+                        errors={errors}
+                      />
+                    )}
+                    {currentStep === 5 && (
+                      <ReviewStep
+                        data={formData}
+                        onEditStep={goToStep}
+                        termsAccepted={formData.termsAccepted}
+                        onTermsChange={(accepted) => updateTermsAccepted(accepted)}
+                        termsError={errors.termsAccepted?.message}
                       />
                     )}
                   </motion.div>
