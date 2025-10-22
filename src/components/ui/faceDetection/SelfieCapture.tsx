@@ -65,7 +65,14 @@ export function SelfieCapture({ value, onCapture, onClear }: SelfieCaptureProps)
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <ToastContainer>
         {toasts.map((t) => (
-          <Toast key={t.id} id={t.id} title={t.title} description={t.description} variant={t.variant} onDismiss={dismiss} />
+          <Toast 
+            key={t.id} 
+            id={t.id} 
+            title={t.title} 
+            description={t.description} 
+            variant={t.variant} 
+            onDismiss={dismiss} 
+          />
         ))}
       </ToastContainer>
 
@@ -73,7 +80,7 @@ export function SelfieCapture({ value, onCapture, onClear }: SelfieCaptureProps)
 
       <div
         className="relative w-full mx-auto overflow-hidden rounded-lg border-2 border-primary bg-black"
-        style={{ display: (hasStream || isStarting) ? 'block' : 'none' }}
+        style={{ display: (!photoUrl && !externalPreviewUrl && (hasStream || isStarting)) ? 'block' : 'none' }}
       >
         <DetectionCanvas canvasRef={canvasRef} faceStatus={faceStatus} lightStatus={lightStatus} />
 
@@ -87,7 +94,7 @@ export function SelfieCapture({ value, onCapture, onClear }: SelfieCaptureProps)
         )}
       </div>
 
-      {!hasStream && !isRunning && !photoUrl && !value && !isStarting && (
+      {!hasStream && !isRunning && !photoUrl && !isStarting && (
         <>
           <div className="flex flex-col items-center justify-center space-y-6 rounded-lg border-2 border-dashed border-border bg-muted/50 p-8">
             <div className="rounded-full bg-primary/10 p-6">
@@ -110,7 +117,7 @@ export function SelfieCapture({ value, onCapture, onClear }: SelfieCaptureProps)
         </>
       )}
 
-      {hasStream && (
+      {hasStream && !photoUrl && !externalPreviewUrl && (
         <>
           <Controls
             onCancel={stopDetection}

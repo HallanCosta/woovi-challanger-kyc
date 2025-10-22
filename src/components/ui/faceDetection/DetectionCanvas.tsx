@@ -11,7 +11,7 @@ export function DetectionCanvas({ canvasRef, faceStatus, lightStatus }: Detectio
   const { t } = useTranslation()
   
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <canvas ref={canvasRef} style={{ width: '100%', display: 'block' }} className="scale-x-[-1]" />
 
       <div className="absolute inset-0 pointer-events-none">
@@ -19,20 +19,37 @@ export function DetectionCanvas({ canvasRef, faceStatus, lightStatus }: Detectio
           <defs>
             <mask id="face-mask-live">
               <rect width="100" height="100" fill="white" />
-              <circle cx="50" cy="50" r="35" fill="black" />
+              {/* Desktop: círculo perfeito; Mobile: oval (altura menor) */}
+              <ellipse cx="50" cy="50" rx="35" ry="35" fill="black" className="hidden md:block" />
+              <ellipse cx="50" cy="50" rx="35" ry="30" fill="black" className="md:hidden" />
             </mask>
           </defs>
           <rect width="100" height="100" fill="black" opacity="0.8" mask="url(#face-mask-live)" />
-          <circle
-            cx="50"
-            cy="50"
-            r="35"
-            fill="none"
-            className={faceStatus.hasFace && lightStatus.label === 'Boa' ? 'stroke-success' : 'stroke-error'}
-            strokeWidth="0.6"
-            strokeDasharray="2,1"
-            opacity="0.9"
-          />
+          <g className="hidden md:block">
+            <circle
+              cx="50"
+              cy="50"
+              r="35"
+              fill="none"
+              className={faceStatus.hasFace && lightStatus.label === 'Boa' ? 'stroke-success' : 'stroke-error'}
+              strokeWidth="0.6"
+              strokeDasharray="2,1"
+              opacity="0.9"
+            />
+          </g>
+          <g className="md:hidden">
+            <ellipse
+              cx="50"
+              cy="50"
+              rx="35"
+              ry="30"
+              fill="none"
+              className={faceStatus.hasFace && lightStatus.label === 'Boa' ? 'stroke-success' : 'stroke-error'}
+              strokeWidth="0.6"
+              strokeDasharray="2,1"
+              opacity="0.9"
+            />
+          </g>
         </svg>
       </div>
 

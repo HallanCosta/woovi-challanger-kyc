@@ -75,9 +75,11 @@ export function useFaceDetection(options: UseFaceDetectionOptions = {}) {
   } as const), [])
 
   const resizeCanvasToVideo = useCallback((canvas: HTMLCanvasElement, video: HTMLVideoElement) => {
-    if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
+    const vw = video.videoWidth || 640
+    const vh = video.videoHeight || 480
+    if (canvas.width !== vw || canvas.height !== vh) {
+      canvas.width = vw
+      canvas.height = vh
     }
   }, [])
 
@@ -226,6 +228,8 @@ export function useFaceDetection(options: UseFaceDetectionOptions = {}) {
 
     setIsRunning(false)
     setHasStream(false)
+    setIsStarting(false)
+    setPhotoUrl(null)
   }, [])
 
   const capturePhoto = useCallback(async (): Promise<CaptureResult | null> => {
@@ -233,7 +237,7 @@ export function useFaceDetection(options: UseFaceDetectionOptions = {}) {
     const canvas = canvasRef.current
     if (!video || !canvas || !hasStream) return null
     if (!lastHasFaceRef.current) return null
-
+    
     runningRef.current = false
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current)
@@ -256,8 +260,8 @@ export function useFaceDetection(options: UseFaceDetectionOptions = {}) {
         const previewUrl = URL.createObjectURL(blob)
         setPhotoUrl(previewUrl)
         resolve({ blob, file, previewUrl })
+        stopDetection()
       }, 'image/jpeg', 0.95)
-      stopDetection()
     })
   }, [hasStream, resizeCanvasToVideo, stopDetection])
 
