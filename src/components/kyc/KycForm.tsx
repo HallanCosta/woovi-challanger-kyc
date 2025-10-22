@@ -248,7 +248,7 @@ export function KycForm() {
                         firstFieldRef={firstFieldRef}
                       />
                     )}
-                    {currentStep === 4 && (
+                    {currentStep === 1 && (
                       <SelfieStep
                         data={formData.selfieInfo}
                         onChange={updateSelfieInfo}
