@@ -18,7 +18,7 @@ vi.mock('@/components/kyc/KeyboardShortcuts', () => ({
 }))
 
 vi.mock('@/components/ui/FileUpload', () => ({
-  FileUpload: ({ onFileSelect, value }: any) => (
+  FileUpload: ({ onFileSelect }: any) => (
     <input
       data-testid="file-upload"
       type="file"

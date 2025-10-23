@@ -13,7 +13,11 @@ export default defineConfig(({ mode }) => {
     allowedHosts: isDev ? ["f7b0d0fdee8b.ngrok-free.app"] : undefined // ngrok (somente dev)
   }
 
-  const workbox = isDev ? { globPatterns: [] } : undefined
+  const workbox = isDev 
+    ? { globPatterns: [] }
+    : {
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024, // 4 MiB para permitir bundles maiores
+      }
   
   return {
     plugins: [
@@ -58,28 +62,5 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, './src')
       }
     },
-    test: {
-      globals: true,
-      environment: 'jsdom',
-      setupFiles: './src/test/setup.ts',
-      coverage: {
-        provider: 'v8',
-        reporter: ['text', 'json', 'html'],
-        exclude: [
-          'dist-dev/',
-          'node_modules/',
-          'src/test/',
-          'src/__tests__/',
-          '**/*.config.*',
-          '**/dist/**',
-          '**/*.d.ts',
-          '**/*.spec.ts',
-          '**/*.test.ts',
-          '**/*.spec.tsx',
-          '**/*.test.tsx',
-          'src/main.tsx'
-        ]
-      }
-    }
   }
 })
