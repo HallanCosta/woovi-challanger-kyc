@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { Header } from '@/components/kyc/Header'
-import { useTheme } from '@/lib/theme/themeProvider'
 import * as themeProvider from '@/lib/theme/themeProvider'
 
 vi.mock('@/lib/theme/themeProvider', () => ({
