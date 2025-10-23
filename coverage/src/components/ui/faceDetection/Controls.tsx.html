@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -91,9 +91,9 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -101,27 +101,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { Button } from '@/components/ui/Button'<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >import { Camera, X } from 'lucide-react'</span>
-<span class="cstat-no" title="statement not covered" >import { useTranslation } from '@/lib/i18n/useTranslation'</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Button } from '@/components/ui/Button'
+import { Camera, X } from 'lucide-react'
+import { useTranslation } from '@/lib/i18n/useTranslation'
 &nbsp;
 type ControlsProps = {
   onCancel: () =&gt; void
@@ -129,22 +129,22 @@ type ControlsProps = {
   canCapture?: boolean
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function Controls({ onCancel, onCapture, canCapture = true }: ControlsProps) {</span>
-<span class="cstat-no" title="statement not covered" >  const { t } = useTranslation()</span>
+export function Controls({ onCancel, onCapture, canCapture = true }: ControlsProps) {
+  const { t } = useTranslation()
   
-<span class="cstat-no" title="statement not covered" >  return (</span>
-<span class="cstat-no" title="statement not covered" >    &lt;div className="flex gap-2"&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Button type="button" variant="outline" onClick={onCancel} className="flex-1"&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;X className="mr-2 h-4 w-4" /&gt;</span>
-<span class="cstat-no" title="statement not covered" >        {t('faceDetection.cancel')}</span>
-<span class="cstat-no" title="statement not covered" >      &lt;/Button&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;Button type="button" onClick={onCapture} disabled={!canCapture} className="flex-1 bg-primary text-primary-foreground"&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Camera className="mr-2 h-4 w-4" /&gt;</span>
-<span class="cstat-no" title="statement not covered" >        {t('faceDetection.capturePhoto')}</span>
-<span class="cstat-no" title="statement not covered" >      &lt;/Button&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
+  return (
+    &lt;div className="flex gap-2"&gt;
+      &lt;Button type="button" variant="outline" onClick={onCancel} className="flex-1"&gt;
+        &lt;X className="mr-2 h-4 w-4" /&gt;
+        {t('faceDetection.cancel')}
+      &lt;/Button&gt;
+      &lt;Button type="button" onClick={onCapture} disabled={!canCapture} className="flex-1 bg-primary text-primary-foreground"&gt;
+        &lt;Camera className="mr-2 h-4 w-4" /&gt;
+        {t('faceDetection.capturePhoto')}
+      &lt;/Button&gt;
+    &lt;/div&gt;
   )
-<span class="cstat-no" title="statement not covered" >}</span>
+}
 &nbsp;
 &nbsp;
 &nbsp;</pre></td></tr></table></pre>
@@ -154,7 +154,7 @@ type ControlsProps = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-22T06:56:32.066Z
+                at 2025-10-23T00:22:47.694Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -17,11 +17,16 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      - name: 👷 Building
+      - name: 📦 Install dependencies
         run: |
           npm install -g pnpm@10.0.0 &&
-          pnpm install &&
-          pnpm build
+          pnpm install
+
+      - name: 🧪 Run tests
+        run: pnpm test -- --run
+
+      - name: 👷 Building
+        run: pnpm build
 
       - name: 🚀 Deploy to Production server
         uses: easingthemes/ssh-deploy@main
@@ -31,7 +36,7 @@ jobs:
           SOURCE: '.'
           REMOTE_HOST: ${{ secrets.PRODUCTION_HOST }}
           REMOTE_USER: ${{ secrets.PRODUCTION_SUDO_USERNAME }}
-          EXCLUDE: '/.docker/, /k6/, docker-compose.yml'
+          EXCLUDE: '/src/__tests__/, /coverage/, /node_modules/'
           TARGET: ${{ secrets.PRODUCTION_PROJECT_DIR }}
           SCRIPT_AFTER: |
             cd ${{ secrets.PRODUCTION_PROJECT_DIR }}

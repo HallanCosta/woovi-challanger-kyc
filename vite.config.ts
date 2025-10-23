@@ -66,8 +66,10 @@ export default defineConfig(({ mode }) => {
         provider: 'v8',
         reporter: ['text', 'json', 'html'],
         exclude: [
+          'dist-dev/',
           'node_modules/',
           'src/test/',
+          'src/__tests__/',
           '**/*.config.*',
           '**/dist/**',
           '**/*.d.ts',
