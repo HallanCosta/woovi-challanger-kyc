@@ -118,7 +118,8 @@ it('should handle drag and drop', () => {
   act(() => {
     const event = {
       preventDefault: vi.fn(),
-      stopPropagation: vi.fn()
+      stopPropagation: vi.fn(),
+      currentTarget: { getBoundingClientRect: () => ({}) } // 👈 adiciona isso
     } as any
     result.current.handleDragEnter(event)
   })
@@ -128,7 +129,8 @@ it('should handle drag and drop', () => {
   act(() => {
     const event = {
       preventDefault: vi.fn(),
-      stopPropagation: vi.fn()
+      stopPropagation: vi.fn(),
+      currentTarget: { getBoundingClientRect: () => ({}) } // 👈 adiciona isso também
     } as any
     result.current.handleDragLeave(event)
   })

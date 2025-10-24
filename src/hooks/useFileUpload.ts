@@ -63,7 +63,7 @@ export function useFileUpload(options: FileUploadOptions = {}) {
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    // Só ativa se não estiver já arrastando
+
     if (!isDragging) {
       setIsDragging(true)
     }
@@ -72,15 +72,15 @@ export function useFileUpload(options: FileUploadOptions = {}) {
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    // Só desativa se estiver saindo do container principal
-    // Verifica se o relatedTarget não é um elemento filho
+
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
     const { clientX, clientY } = e
     
     if (clientX < rect.left || clientX > rect.right || 
         clientY < rect.top || clientY > rect.bottom) {
-      setIsDragging(false)
+      return
     }
+    setIsDragging(false)
   }, [])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
