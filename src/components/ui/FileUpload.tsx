@@ -66,6 +66,12 @@ export function FileUpload({
     }
   }, [displayFile])
 
+  const handleOpenFilePicker = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    openFilePicker()
+  } 
+
   return (
     <div className="w-full">
       <input
@@ -83,7 +89,7 @@ export function FileUpload({
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          onClick={!disabled ? openFilePicker : undefined}
+          onClick={!disabled ? handleOpenFilePicker : undefined}
           className={cn(
             'relative flex cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed px-6 py-8 transition-colors',
             isDragging
@@ -126,6 +132,7 @@ export function FileUpload({
               <button
                 type="button"
                 onClick={(e) => {
+                  e.preventDefault()
                   e.stopPropagation()
                   clearFile()
                   onFileSelect(null)
@@ -151,6 +158,7 @@ export function FileUpload({
             <button
               type="button"
               onClick={(e) => {
+                e.preventDefault()
                 e.stopPropagation()
                 clearFile()
                 onFileSelect(null)

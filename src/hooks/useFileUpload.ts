@@ -63,13 +63,24 @@ export function useFileUpload(options: FileUploadOptions = {}) {
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setIsDragging(true)
-  }, [])
+    // Só ativa se não estiver já arrastando
+    if (!isDragging) {
+      setIsDragging(true)
+    }
+  }, [isDragging])
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setIsDragging(false)
+    // Só desativa se estiver saindo do container principal
+    // Verifica se o relatedTarget não é um elemento filho
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+    const { clientX, clientY } = e
+    
+    if (clientX < rect.left || clientX > rect.right || 
+        clientY < rect.top || clientY > rect.bottom) {
+      setIsDragging(false)
+    }
   }, [])
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
