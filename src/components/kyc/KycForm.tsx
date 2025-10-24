@@ -49,18 +49,23 @@ export function KycForm() {
 
   const { toasts, dismiss } = useToast()
   const { t } = useTranslation()
+
   const steps = stepsIds.map((id, index) => ({ number: index + 1, label: t(id) }))
 
   const handleNext = useCallback(async () => {
     const isValid = await validateStep(currentStep)
+
     if (isValid) {
       setValidatedSteps((prev) => {
         if (!prev.includes(currentStep)) {
           return [...prev, currentStep]
         }
+
         return prev
       })
+
       const nextStepNumber = currentStep + 1
+      
       setMaxReachedStep((prev) => Math.max(prev, nextStepNumber))
       nextStep()
     }
@@ -74,6 +79,7 @@ export function KycForm() {
     
     if (step > currentStep && step <= maxReachedStep) {
       const isValid = await validateStep(currentStep)
+
       if (isValid) {
         setValidatedSteps((prev) => {
           if (!prev.includes(currentStep)) {
@@ -81,12 +87,30 @@ export function KycForm() {
           }
           return prev
         })
+
         goToStep(step)
       }
     }
   }, [currentStep, maxReachedStep, validateStep, goToStep])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async () => {
+    if (!isLastStep) {
+      return
+    }
+    
+    const isValid = await validateStep(currentStep)
+    if (!isValid) {
+      return
+    }
+    
+    setIsSubmitting(true)
+    onSubmit()
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    setIsSubmitting(false)
+    setIsSubmitted(true)
+  }, [onSubmit])
+
+  const onSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!isLastStep) {
@@ -106,17 +130,8 @@ export function KycForm() {
   }
 
   const handleSubmitShortcut = useCallback(async () => {
-    if (!isLastStep || isSubmitting) return
-    
-    const isValid = await validateStep(currentStep)
-    if (!isValid) return
-    
-    setIsSubmitting(true)
-    onSubmit()
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-  }, [isLastStep, isSubmitting, currentStep, validateStep, onSubmit])
+    handleSubmit()
+  }, [handleSubmit])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -208,7 +223,7 @@ export function KycForm() {
               />
             </motion.div>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={onSubmitForm}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -248,7 +263,7 @@ export function KycForm() {
                         firstFieldRef={firstFieldRef}
                       />
                     )}
-                    {currentStep === 1 && (
+                    {currentStep === 4 && (
                       <SelfieStep
                         data={formData.selfieInfo}
                         onChange={updateSelfieInfo}

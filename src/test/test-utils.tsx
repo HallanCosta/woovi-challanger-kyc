@@ -1,10 +1,8 @@
-import { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
+import type { ReactElement } from 'react'
+import { render, type RenderOptions } from '@testing-library/react'
 
-// Mock do hook useTranslation
 export const mockTranslation = (key: string) => key
 
-// Wrapper personalizado para testes
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>
 }

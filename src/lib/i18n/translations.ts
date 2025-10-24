@@ -115,6 +115,7 @@ export const translations = {
     idNumberPlaceholder: "000.000.000-00",
     idFrontUpload: "Upload ID (Front)",
     idBackUpload: "Upload ID (Back)",
+    identityDocuments: "Identity Documents",
     fileConstraintsIdentity: "Accepted: JPG, PNG. Max size: 5MB.",
     idBackNote: "Back side required for RG and Driver's License.",
 
@@ -302,6 +303,7 @@ export const translations = {
     idNumberPlaceholder: "000.000.000-00",
     idFrontUpload: "Enviar Documento (Frente)",
     idBackUpload: "Enviar Documento (Verso)",
+    identityDocuments: "Documentos de Identidade",
     fileConstraintsIdentity: "Aceitos: JPG, PNG. Tamanho máx.: 5MB.",
     idBackNote: "Verso obrigatório para RG e CNH.",
 
@@ -489,6 +491,7 @@ export const translations = {
     idNumberPlaceholder: "000.000.000-00",
     idFrontUpload: "Subir Documento (Frente)",
     idBackUpload: "Subir Documento (Reverso)",
+    identityDocuments: "Documentos de Identidad",
     fileConstraintsIdentity: "Aceptados: JPG, PNG. Tamaño máx.: 5MB.",
     idBackNote: "Reverso obligatorio para RG y Licencia de Conducir.",
 

@@ -106,7 +106,6 @@ it('should enable phone field when country is selected', () => {
 
 it('should clear phone when changing country', async () => {
   const handleChange = vi.fn()
-  const user = userEvent.setup()
 
   const dataWithPhone = { 
     ...mockData, 

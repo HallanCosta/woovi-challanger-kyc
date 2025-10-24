@@ -1,7 +1,7 @@
-import { it, expect, beforeEach, vi } from 'vitest'
+import { it, expect, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { ThemeProvider, useTheme } from '@/lib/theme/themeProvider'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 const localStorageMock = (() => {
   let store: Record<string, string> = {}

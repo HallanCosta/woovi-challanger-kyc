@@ -1,6 +1,5 @@
 import { it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { FileUpload } from '@/components/ui/FileUpload'
 
 vi.mock('@/lib/i18n/useTranslation', () => ({

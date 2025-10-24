@@ -94,7 +94,7 @@ export function SelfieCapture({ value, onCapture, onClear }: SelfieCaptureProps)
         )}
       </div>
 
-      {!hasStream && !isRunning && !photoUrl && !isStarting && (
+      {!hasStream && !isRunning && !photoUrl && !isStarting && !externalPreviewUrl && (
         <>
           <div className="flex flex-col items-center justify-center space-y-6 rounded-lg border-2 border-dashed border-border bg-muted/50 p-8">
             <div className="rounded-full bg-primary/10 p-6">

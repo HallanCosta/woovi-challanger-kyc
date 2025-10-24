@@ -44,13 +44,28 @@ export function ReviewStep({ data, onEditStep, termsAccepted, onTermsChange, ter
             <h3 className="font-semibold">{t("personalInfo")}</h3>
             <Button type="button" variant="outline" onClick={() => onEditStep(1)}>{t("edit")}</Button>
           </div>
-          <ul className="mt-2 text-sm text-muted-foreground">
-            <li><span className="font-semibold">{t("fullName")}:</span> {data.personalInfo.fullName}</li>
-            <li><span className="font-semibold">{t("email")}:</span> {data.personalInfo.email}</li>
-            <li><span className="font-semibold">{t("phone")}:</span> {data.personalInfo.phone}</li>
-            <li><span className="font-semibold">{t("country")}:</span> {data.personalInfo.country}</li>
-            <li><span className="font-semibold">{t("dateOfBirth")}:</span> {data.personalInfo.dateOfBirth}</li>
-          </ul>
+          <div className="mt-2 space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("fullName")}:</span>
+              <span className="text-foreground">{data.personalInfo.fullName}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("email")}:</span>
+              <span className="text-foreground">{data.personalInfo.email}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("phone")}:</span>
+              <span className="text-foreground">{data.personalInfo.phone}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("country")}:</span>
+              <span className="text-foreground">{data.personalInfo.country}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("dateOfBirth")}:</span>
+              <span className="text-foreground">{data.personalInfo.dateOfBirth}</span>
+            </div>
+          </div>
         </section>
 
         <section className="rounded-md border p-4">
@@ -58,28 +73,44 @@ export function ReviewStep({ data, onEditStep, termsAccepted, onTermsChange, ter
             <h3 className="font-semibold">{t("address")}</h3>
             <Button type="button" variant="outline" onClick={() => onEditStep(2)}>{t("edit")}</Button>
           </div>
-          <ul className="mt-2 text-sm text-muted-foreground">
-            <li><span className="font-semibold">{t("streetAddress")}:</span> {data.addressInfo.street}</li>
-            <li><span className="font-semibold">{t("city")}:</span> {data.addressInfo.city}</li>
-            <li><span className="font-semibold">{t("stateProvince")}:</span> {data.addressInfo.state}</li>
-            <li><span className="font-semibold">{t("postalCode")}:</span> {data.addressInfo.postalCode}</li>
-          </ul>
+          <div className="mt-2 space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("streetAddress")}:</span>
+              <span className="text-foreground">{data.addressInfo.street}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("city")}:</span>
+              <span className="text-foreground">{data.addressInfo.city}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("stateProvince")}:</span>
+              <span className="text-foreground">{data.addressInfo.state}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-muted-foreground">{t("postalCode")}:</span>
+              <span className="text-foreground">{data.addressInfo.postalCode}</span>
+            </div>
+          </div>
           {data.addressInfo.addressProof && addressProofUrl && (
             <div className="mt-3">
-              <div className="text-sm font-semibold mb-1">{t("addressProof")}</div>
-              {data.addressInfo.addressProof.type.startsWith('image/') ? (
-                <img
-                  src={addressProofUrl}
-                  alt="Comprovante de endereço"
-                  className="h-40 w-auto rounded border object-cover"
-                />
-              ) : (
-                <div>
-                  <object data={addressProofUrl} type={data.addressInfo.addressProof.type} className="h-40 w-full rounded border">
-                    <a href={addressProofUrl} target="_blank" rel="noreferrer" className="underline">{t("openDocument")}</a>
-                  </object>
+              <div className="flex justify-between items-start gap-4">
+                <div className="text-sm font-semibold text-muted-foreground">{t("addressProof")}:</div>
+                <div className="flex-shrink-0">
+                  {data.addressInfo.addressProof.type.startsWith('image/') ? (
+                    <img
+                      src={addressProofUrl}
+                      alt="Comprovante de endereço"
+                      className="h-32 w-auto rounded border object-cover"
+                    />
+                  ) : (
+                    <div>
+                      <object data={addressProofUrl} type={data.addressInfo.addressProof.type} className="h-32 w-48 rounded border">
+                        <a href={addressProofUrl} target="_blank" rel="noreferrer" className="underline">{t("openDocument")}</a>
+                      </object>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           )}
         </section>
@@ -89,27 +120,38 @@ export function ReviewStep({ data, onEditStep, termsAccepted, onTermsChange, ter
             <h3 className="font-semibold">{t("identity")}</h3>
             <Button type="button" variant="outline" onClick={() => onEditStep(3)}>{t("edit")}</Button>
           </div>
-          <div className="mt-2 flex items-start gap-3">
-            <div className="flex items-center gap-3">
-              {data.identityInfo.idFront && (
-                <img
-                  src={URL.createObjectURL(data.identityInfo.idFront)}
-                  alt="ID Front"
-                  className="h-28 w-auto rounded border object-cover"
-                />
-              )}
-              {data.identityInfo.idBack && (
-                <img
-                  src={URL.createObjectURL(data.identityInfo.idBack)}
-                  alt="ID Back"
-                  className="h-28 w-auto rounded border object-cover"
-                />
-              )}
+          <div className="mt-2 space-y-3">
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="font-semibold text-muted-foreground">{t("idType")}:</span>
+                <span className="text-foreground">{data.identityInfo.idType}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold text-muted-foreground">{t("idNumber")}:</span>
+                <span className="text-foreground">{data.identityInfo.idNumber}</span>
+              </div>
             </div>
-            <ul className="text-sm text-muted-foreground">
-              <li><span className="font-semibold">{t("idType")}:</span> {data.identityInfo.idType}</li>
-              <li><span className="font-semibold">{t("idNumber")}:</span> {data.identityInfo.idNumber}</li>
-            </ul>
+            {(data.identityInfo.idFront || data.identityInfo.idBack) && (
+              <div className="flex justify-between items-start gap-4">
+                <div className="text-sm font-semibold text-muted-foreground">{t("identityDocuments")}:</div>
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  {data.identityInfo.idFront && (
+                    <img
+                      src={URL.createObjectURL(data.identityInfo.idFront)}
+                      alt="ID Front"
+                      className="h-24 w-auto rounded border object-cover"
+                    />
+                  )}
+                  {data.identityInfo.idBack && (
+                    <img
+                      src={URL.createObjectURL(data.identityInfo.idBack)}
+                      alt="ID Back"
+                      className="h-24 w-auto rounded border object-cover"
+                    />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
@@ -120,13 +162,21 @@ export function ReviewStep({ data, onEditStep, termsAccepted, onTermsChange, ter
           </div>
           <div className="mt-2">
             {data.selfieInfo.selfie ? (
-              <img
-                src={URL.createObjectURL(data.selfieInfo.selfie)}
-                alt="Selfie"
-                className="h-32 w-32 rounded-full border object-cover"
-              />
+              <div className="flex justify-between items-start gap-4">
+                <div className="text-sm font-semibold text-muted-foreground">{t("selfie")}:</div>
+                <div className="flex-shrink-0">
+                  <img
+                    src={URL.createObjectURL(data.selfieInfo.selfie)}
+                    alt="Selfie"
+                    className="h-24 w-24 rounded-full border object-cover"
+                  />
+                </div>
+              </div>
             ) : (
-              <p className="text-sm text-muted-foreground">{t("selfieReady")}</p>
+              <div className="flex justify-between items-start gap-4">
+                <div className="text-sm font-semibold text-muted-foreground">{t("selfie")}:</div>
+                <div className="text-sm text-muted-foreground">{t("selfieReady")}</div>
+              </div>
             )}
           </div>
         </section>
