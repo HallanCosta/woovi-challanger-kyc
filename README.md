@@ -49,7 +49,7 @@ Identity verification system (KYC - Know Your Customer) developed as a Woovi cha
 
 
 ## ⏱️ Estimated time
-- Development time was around 38 hours
+- Development time was around 40 hours
 
 
 ## 🚀 How to Run the Project

@@ -49,7 +49,7 @@ Sistema de verificação de identidade (KYC - Know Your Customer) desenvolvido c
 
 
 ## ⏱️ Tempo estimado
-- Tempo contabilizado de desenvolvimento  foram em torno de 38 horas
+- Tempo contabilizado de desenvolvimento  foram em torno de 40 horas
 
 
 ## 🚀 Como Rodar o Projeto
