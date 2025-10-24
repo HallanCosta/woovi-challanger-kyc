@@ -63,7 +63,7 @@ export function ReviewStep({ data, onEditStep, termsAccepted, onTermsChange, ter
             </div>
             <div className="flex justify-between">
               <span className="font-semibold text-muted-foreground">{t("dateOfBirth")}:</span>
-              <span className="text-foreground">{data.personalInfo.dateOfBirth}</span>
+              <span className="text-foreground">{data.personalInfo.dateOfBirth.split('-').reverse().join('/')}</span>
             </div>
           </div>
         </section>
