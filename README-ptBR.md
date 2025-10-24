@@ -9,7 +9,7 @@ Sistema de verificação de identidade (KYC - Know Your Customer) desenvolvido c
 - **Storybook:** https://storybook-kyc.hallancosta.com
 
 ## 📸 Pré visualização
-<img src="https://github.com/HallanCosta/woovi-challanger-kyc/blob/main/screenshots/screenshot1.png">
+<img src="https://github.com/HallanCosta/woovi-challanger-kyc/blob/main/screenshots/screenshot1.png?raw=true">
 
 ## 🛠️ Tecnologias Utilizadas
 

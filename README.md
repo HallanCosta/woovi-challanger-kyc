@@ -9,7 +9,7 @@ Identity verification system (KYC - Know Your Customer) developed as a Woovi cha
 - **Storybook:** https://storybook-kyc.hallancosta.com
 
 ## 📸 Preview
-<img src="https://github.com/HallanCosta/woovi-challanger-kyc/blob/main/screenshots/screenshot1.png">
+<img src="https://github.com/HallanCosta/woovi-challanger-kyc/blob/main/screenshots/screenshot1.png?raw=true">
 
 ## 🛠️ Technologies Used
 
