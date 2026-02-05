@@ -7,6 +7,8 @@
     "start": "vite preview --port 4173",
     "restart:production": "pm2 restart ecosystem.config.cjs",
     "start:production": "pm2 start ecosystem.config.cjs",
+    "start:storybook": "serve storybook-static -p 4172",
+    "restart:storybook": "pm2 restart storybook",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
