@@ -6,7 +6,7 @@ Sistema de verificação de identidade (KYC - Know Your Customer) desenvolvido c
 
 ## Live demo
 - **Produção:** https://kyc.hallancosta.com
-- **Storybook:** https://storybook-kyc.hallancosta.com
+- **Storybook:** https://kyc-storybook.hallancosta.com
 
 ## 📸 Pré visualização
 <img src="https://github.com/user-attachments/assets/05e83a2b-6d01-4276-ab3e-c687c41f1017">
