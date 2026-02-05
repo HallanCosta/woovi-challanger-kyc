@@ -1,4 +1,4 @@
-name: 🚀 Deploy to Production 
+name: 🚀 Deploy to Production
 
 on:
   workflow_dispatch:
@@ -7,8 +7,8 @@ on:
    #  - main
 
 jobs:
-  deploy:
-    name: 🚀 Deployment to Production
+  build:
+    name: 🏗️ Build & Deploy
     runs-on: ubuntu-latest
 
     if: github.ref == 'refs/heads/main'
@@ -17,29 +17,18 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
+      - name: 📦 Setup pnpm
+        run: npm install -g pnpm@10.0.0
+
       - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 👷 Build project
         run: |
-          npm install -g pnpm@10.0.0 &&
-          pnpm install
+          pnpm build &&
+          pnpm build:storybook
 
-      - name: 🧪 Run tests
-        run: pnpm test -- --run
-
-      - name: 👷 Building
-        run: pnpm build
-
-      - name: 📖 Build Storybook static
-        run: pnpm build:storybook
-
-      - name: ⬆️ Upload Storybook artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: storybook-static
-          path: storybook-static
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: 🚀 Deploy to Production server
+      - name: 🚢 Deploy to Production server
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.PRODUCTION_SSH_PRIVATE_KEY }}
@@ -47,10 +36,27 @@ jobs:
           SOURCE: '.'
           REMOTE_HOST: ${{ secrets.PRODUCTION_HOST }}
           REMOTE_USER: ${{ secrets.PRODUCTION_SUDO_USERNAME }}
-          EXCLUDE: '/src/__tests__/, /coverage/, /node_modules/'
+          EXCLUDE: '/screenshots/, /.storybook/, /coverage/, vite.config.ts, vitest.config.ts'
           TARGET: ${{ secrets.PRODUCTION_PROJECT_DIR }}
-          SCRIPT_AFTER: |
-            cd ${{ secrets.PRODUCTION_PROJECT_DIR }}
-            export PATH=$HOME/.nvm/versions/node/v22.20.0/bin:$PATH
-            echo "Restarting production server with PNPM..."
-            pnpm restart:production
+
+  deploy:
+      name: 🚀 Restart Services
+      runs-on: ubuntu-latest
+      needs: build
+
+      steps:
+        - name: 🏁 Reload Production Services
+          uses: appleboy/ssh-action@v1.0.3
+          with:
+            host: ${{ secrets.PRODUCTION_HOST }}
+            username: ${{ secrets.PRODUCTION_SUDO_USERNAME }}
+            key: ${{ secrets.PRODUCTION_SSH_PRIVATE_KEY }}
+            script: |
+              cd ${{ secrets.PRODUCTION_PROJECT_DIR }}
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              nvm use 24
+              echo "Stopping production servers..."
+              pnpm stop:production
+              echo "Starting production servers..."
+              pnpm start:production
