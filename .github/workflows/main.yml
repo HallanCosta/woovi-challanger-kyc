@@ -36,7 +36,7 @@ jobs:
           SOURCE: '.'
           REMOTE_HOST: ${{ secrets.PRODUCTION_HOST }}
           REMOTE_USER: ${{ secrets.PRODUCTION_SUDO_USERNAME }}
-          EXCLUDE: '/src/ /screenshots/, /tsconfig.json, /tsconfig.app.json, /tsconfig.node.json, /tsconfig.test.json, /README.md, /README-ptBR.md, /.storybook/, /coverage/, /eslint.config.js'
+          EXCLUDE: '/screenshots/, /.storybook/, /coverage/, vite.config.ts, vitest.config.ts'
           TARGET: ${{ secrets.PRODUCTION_PROJECT_DIR }}
 
   deploy:
